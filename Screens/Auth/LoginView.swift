@@ -63,9 +63,7 @@ struct LoginView: View {
                     }
                     .font(.footnote)
                 }
-                .padding(.bottom, 14)
-
-                footer
+                .padding(.bottom, 6)
             }
             .padding(.horizontal, 22)
             .padding(.bottom, 22)
@@ -425,32 +423,6 @@ struct LoginView: View {
                         : .red
                 )
             }
-        }
-    }
-
-    private var footer: some View {
-        VStack(spacing: 8) {
-            HStack(spacing: 7) {
-                Circle()
-                    .fill(neonPink)
-                    .frame(width: 5, height: 5)
-
-                Circle()
-                    .fill(softPink)
-                    .frame(width: 5, height: 5)
-
-                Circle()
-                    .fill(Color.purple)
-                    .frame(width: 5, height: 5)
-            }
-
-            Text("YOUR NIGHT STARTS HERE")
-                .font(.caption2)
-                .fontWeight(.semibold)
-                .tracking(1.4)
-                .foregroundStyle(
-                    Color.white.opacity(0.28)
-                )
         }
     }
 
