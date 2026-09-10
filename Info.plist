@@ -4,6 +4,8 @@
 <dict>
 	<key>API_BASE_URL</key>
 	<string>https://aftr-backend.onrender.com</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>AFTR looks through photos taken during your Night to add them to the recap. Nothing is uploaded until you pick it.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

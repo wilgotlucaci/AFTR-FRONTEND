@@ -134,10 +134,10 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				92447CA13041AE7E00FEDCB2 /* Models */,
-				928C8B5C304078C3008E68EA /* Home */,
 				92447C9D30409C8B00FEDCB2 /* Night */,
+				92447CA13041AE7E00FEDCB2 /* Models */,
 				92447CA53041AF6300FEDCB2 /* Recap */,
+				928C8B5C304078C3008E68EA /* Home */,
 			);
 			name = AFTR;
 			packageProductDependencies = (

@@ -250,6 +250,113 @@ final class APIService {
         )
     }
 
+    func getMedia(
+        nightId: String
+    ) async throws -> [NightMedia] {
+        let token = try await authService.accessToken()
+
+        guard let url = URL(
+            string: "\(baseURL)/nights/\(nightId)/media"
+        ) else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        request.setValue(
+            "Bearer \(token)",
+            forHTTPHeaderField: "Authorization"
+        )
+
+        let (data, response) = try await URLSession.shared.data(
+            for: request
+        )
+
+        try validate(response)
+
+        return try JSONDecoder().decode(
+            [NightMedia].self,
+            from: data
+        )
+    }
+
+    func uploadMedia(
+        nightId: String,
+        data mediaData: Data,
+        contentType: String,
+        filename: String,
+        takenAt: String?,
+        latitude: Double?,
+        longitude: Double?
+    ) async throws -> UploadMediaResponse {
+        let token = try await authService.accessToken()
+
+        guard let url = URL(
+            string: "\(baseURL)/nights/\(nightId)/media"
+        ) else {
+            throw URLError(.badURL)
+        }
+
+        let boundary = "AFTR-\(UUID().uuidString)"
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(
+            "Bearer \(token)",
+            forHTTPHeaderField: "Authorization"
+        )
+        request.setValue(
+            "multipart/form-data; boundary=\(boundary)",
+            forHTTPHeaderField: "Content-Type"
+        )
+
+        var body = Data()
+
+        func appendField(_ name: String, _ value: String) {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append(
+                "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n"
+                    .data(using: .utf8)!
+            )
+            body.append("\(value)\r\n".data(using: .utf8)!)
+        }
+
+        if let takenAt {
+            appendField("taken_at", takenAt)
+        }
+        if let latitude {
+            appendField("latitude", String(latitude))
+        }
+        if let longitude {
+            appendField("longitude", String(longitude))
+        }
+
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append(
+            "Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n"
+                .data(using: .utf8)!
+        )
+        body.append(
+            "Content-Type: \(contentType)\r\n\r\n".data(using: .utf8)!
+        )
+        body.append(mediaData)
+        body.append("\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+
+        let (responseData, response) = try await URLSession.shared.upload(
+            for: request,
+            from: body
+        )
+
+        try validate(response)
+
+        return try JSONDecoder().decode(
+            UploadMediaResponse.self,
+            from: responseData
+        )
+    }
+
     func sendLocation(
         nightId: String,
         latitude: Double,

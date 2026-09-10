@@ -8,6 +8,9 @@ struct RecapView: View {
     @State private var isLoading = true
     @State private var errorMessage = ""
 
+    @State private var media: [NightMedia] = []
+    @State private var showAddPhotos = false
+
     private let apiService = APIService()
 
     private let neonPink = Color(
@@ -49,6 +52,8 @@ struct RecapView: View {
                             venueTimelineSection(recap)
                         }
 
+                        bestMomentsSection(recap)
+
                         movementSection(recap)
 
                         footer
@@ -64,6 +69,19 @@ struct RecapView: View {
         }
         .task {
             await loadRecap()
+            await loadMedia()
+        }
+        .sheet(isPresented: $showAddPhotos) {
+            if let recap {
+                AddPhotosView(
+                    nightId: nightId,
+                    start: parseISODate(recap.started_at) ?? Date(),
+                    end: parseISODate(recap.ended_at ?? "") ?? Date(),
+                    routeCoordinates: (recap.route ?? [])
+                        .flatMap { $0.coordinates },
+                    onDone: { Task { await loadMedia() } }
+                )
+            }
         }
     }
 
@@ -1042,6 +1060,84 @@ struct RecapView: View {
         }
 
         isLoading = false
+    }
+
+    @MainActor
+    private func loadMedia() async {
+        media = (
+            try? await apiService.getMedia(nightId: nightId)
+        ) ?? media
+    }
+
+    private func bestMomentsSection(
+        _ recap: RecapModel
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                sectionTitle("BEST MOMENTS")
+
+                Spacer()
+
+                Button {
+                    showAddPhotos = true
+                } label: {
+                    HStack(spacing: 5) {
+                        Image(systemName: "plus")
+                        Text(media.isEmpty ? "Add photos" : "Add")
+                    }
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(neonPink)
+                }
+            }
+
+            if media.isEmpty {
+                Text(
+                    "Pull in the photos you took during this Night."
+                )
+                .font(.caption)
+                .foregroundStyle(Color.white.opacity(0.4))
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        ForEach(media) { item in
+                            momentCell(item)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func momentCell(
+        _ item: NightMedia
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            AsyncImage(url: item.imageURL) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+            } placeholder: {
+                Color.white.opacity(0.06)
+            }
+            .frame(width: 150, height: 190)
+            .clipped()
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+
+            if let venue = item.venue_name {
+                Text(venue)
+                    .font(.caption2)
+                    .foregroundStyle(Color.white.opacity(0.55))
+                    .lineLimit(1)
+            } else if let taken = item.taken_at,
+                      let date = parseISODate(taken) {
+                Text(
+                    date.formatted(date: .omitted, time: .shortened)
+                )
+                .font(.caption2)
+                .foregroundStyle(Color.white.opacity(0.55))
+            }
+        }
+        .frame(width: 150)
     }
 }
 
