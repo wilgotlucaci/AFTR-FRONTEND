@@ -19,7 +19,8 @@ enum PhotoSelector {
         }
     }
 
-    /// Images taken between `start` and `end`, minus screenshots, and —
+    /// Images taken around the Night (a 2-hour grace window on each side,
+    /// since people open and close the app late), minus screenshots, and —
     /// when `coordinates` are given and the photo carries GPS — within
     /// ~500 m of the night.
     static func candidates(
@@ -27,13 +28,17 @@ enum PhotoSelector {
         end: Date,
         near coordinates: [CLLocationCoordinate2D]
     ) -> [PHAsset] {
+        let grace: TimeInterval = 2 * 60 * 60
+        let windowStart = start.addingTimeInterval(-grace)
+        let windowEnd = end.addingTimeInterval(grace)
+
         let options = PHFetchOptions()
         options.predicate = NSPredicate(
             format:
                 "mediaType == %d AND creationDate >= %@ AND creationDate <= %@",
             PHAssetMediaType.image.rawValue,
-            start as NSDate,
-            end as NSDate
+            windowStart as NSDate,
+            windowEnd as NSDate
         )
         options.sortDescriptors = [
             NSSortDescriptor(key: "creationDate", ascending: true)
