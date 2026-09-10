@@ -11,8 +11,10 @@ struct HomeView: View {
 
     @Binding var activeNightId: String
     @Binding var activeNightTitle: String
+    @Binding var isLoggedIn: Bool
 
     private let apiService = APIService()
+    private let authService = AuthService()
 
     private let neonPink = Color(
         red: 1.0,
@@ -124,7 +126,12 @@ struct HomeView: View {
 
             Spacer()
 
-            Button {
+            Menu {
+                Button(role: .destructive) {
+                    signOut()
+                } label: {
+                    Label("Sign out", systemImage: "rectangle.portrait.and.arrow.right")
+                }
             } label: {
                 Image(systemName: "person.crop.circle")
                     .font(.system(size: 27))
@@ -700,6 +707,17 @@ struct HomeView: View {
         }
     }
 
+    private func signOut() {
+        Task {
+            await authService.signOut()
+
+            await MainActor.run {
+                activeNightId = ""
+                isLoggedIn = false
+            }
+        }
+    }
+
     @MainActor
     private func loadNights() async {
         isLoadingNights = true
@@ -719,6 +737,7 @@ struct HomeView: View {
 #Preview {
     HomeView(
         activeNightId: .constant(""),
-        activeNightTitle: .constant("")
+        activeNightTitle: .constant(""),
+        isLoggedIn: .constant(true)
     )
 }
