@@ -7,6 +7,21 @@ struct CreateNightResponse: Decodable {
     let ended_at: String?
     let status: String
     let owner_user_id: String?
+    let join_code: String?
+}
+
+struct NightDetail: Decodable {
+    let id: String
+    let title: String
+    let join_code: String?
+    let status: String
+    let participant_count: Int
+    let participants: [NightDetailParticipant]
+}
+
+struct NightDetailParticipant: Decodable, Identifiable {
+    let id: String
+    let name: String
 }
 
 final class APIService {
@@ -139,6 +154,79 @@ final class APIService {
         )
 
         try validate(response)
+    }
+
+    func joinNight(
+        code: String
+    ) async throws -> CreateNightResponse {
+        let token = try await authService.accessToken()
+
+        guard let url = URL(
+            string: "\(baseURL)/nights/join"
+        ) else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+
+        request.setValue(
+            "application/json",
+            forHTTPHeaderField: "Content-Type"
+        )
+
+        request.setValue(
+            "Bearer \(token)",
+            forHTTPHeaderField: "Authorization"
+        )
+
+        request.httpBody = try JSONSerialization.data(
+            withJSONObject: [
+                "code": code
+            ]
+        )
+
+        let (data, response) = try await URLSession.shared.data(
+            for: request
+        )
+
+        try validate(response)
+
+        return try JSONDecoder().decode(
+            CreateNightResponse.self,
+            from: data
+        )
+    }
+
+    func getNight(
+        nightId: String
+    ) async throws -> NightDetail {
+        let token = try await authService.accessToken()
+
+        guard let url = URL(
+            string: "\(baseURL)/nights/\(nightId)"
+        ) else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        request.setValue(
+            "Bearer \(token)",
+            forHTTPHeaderField: "Authorization"
+        )
+
+        let (data, response) = try await URLSession.shared.data(
+            for: request
+        )
+
+        try validate(response)
+
+        return try JSONDecoder().decode(
+            NightDetail.self,
+            from: data
+        )
     }
 
     func sendLocation(

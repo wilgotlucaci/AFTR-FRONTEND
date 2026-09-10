@@ -9,6 +9,9 @@ struct HomeView: View {
     @State private var isLoadingNights = false
     @State private var selectedNight: NightSummary?
 
+    @State private var joinCode = ""
+    @State private var isJoiningNight = false
+
     @Binding var activeNightId: String
     @Binding var activeNightTitle: String
     @Binding var isLoggedIn: Bool
@@ -61,6 +64,8 @@ struct HomeView: View {
                         welcomeSection
 
                         startNightCard
+
+                        joinNightCard
 
                         quickOverviewSection
 
@@ -352,6 +357,69 @@ struct HomeView: View {
                 neonPink.opacity(0.12),
                 lineWidth: 1
             )
+        }
+    }
+
+    private var joinNightCard: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "person.2.wave.2.fill")
+                .font(.system(size: 18))
+                .foregroundStyle(softPink)
+
+            TextField(
+                "",
+                text: $joinCode,
+                prompt: Text("Join code")
+                    .foregroundStyle(
+                        Color.white.opacity(0.40)
+                    )
+            )
+            .textInputAutocapitalization(.characters)
+            .autocorrectionDisabled()
+            .foregroundStyle(.white)
+            .tint(neonPink)
+            .onChange(of: joinCode) { _, newValue in
+                joinCode = String(
+                    newValue.uppercased().prefix(6)
+                )
+            }
+
+            Button {
+                joinWithCode()
+            } label: {
+                if isJoiningNight {
+                    ProgressView()
+                        .tint(.white)
+                } else {
+                    Text("Join")
+                        .font(
+                            .system(
+                                size: 15,
+                                weight: .semibold
+                            )
+                        )
+                        .foregroundStyle(.white)
+                }
+            }
+            .disabled(
+                isJoiningNight || joinCode.count < 6
+            )
+            .opacity(joinCode.count < 6 ? 0.4 : 1)
+        }
+        .padding(.horizontal, 16)
+        .frame(height: 54)
+        .background(
+            Color.white.opacity(0.05)
+        )
+        .clipShape(
+            RoundedRectangle(cornerRadius: 16)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(
+                    Color.white.opacity(0.06),
+                    lineWidth: 1
+                )
         }
     }
 
@@ -707,6 +775,41 @@ struct HomeView: View {
         }
     }
 
+    private func joinWithCode() {
+        let code = joinCode.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+
+        guard code.count >= 6 else {
+            status = "Enter the 6-character join code."
+            return
+        }
+
+        isJoiningNight = true
+        status = ""
+
+        Task {
+            do {
+                let night = try await apiService.joinNight(
+                    code: code
+                )
+
+                await MainActor.run {
+                    activeNightTitle = night.title
+                    activeNightId = night.id
+                    isJoiningNight = false
+                    joinCode = ""
+                }
+            } catch {
+                await MainActor.run {
+                    isJoiningNight = false
+                    status =
+                        "Could not join Night. Check the code."
+                }
+            }
+        }
+    }
+
     private func signOut() {
         Task {
             await authService.signOut()
@@ -725,6 +828,14 @@ struct HomeView: View {
         do {
             nights =
                 try await apiService.getNights()
+
+            if activeNightId.isEmpty,
+               let ongoing = nights.first(
+                   where: { $0.status == "active" }
+               ) {
+                activeNightTitle = ongoing.title
+                activeNightId = ongoing.id
+            }
         } catch {
             status =
                 "Could not load Nights: \(error.localizedDescription)"

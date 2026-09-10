@@ -10,6 +10,9 @@ struct ActiveNightView: View {
     @State private var status = ""
     @State private var startedAt = Date()
 
+    @State private var joinCode = ""
+    @State private var participantCount = 1
+
     @StateObject private var locationManager = LocationManager()
 
     private let apiService = APIService()
@@ -54,6 +57,27 @@ struct ActiveNightView: View {
                 )
             }
         }
+        .task {
+            while !Task.isCancelled {
+                await refreshDetail()
+
+                try? await Task.sleep(
+                    for: .seconds(20)
+                )
+            }
+        }
+    }
+
+    @MainActor
+    private func refreshDetail() async {
+        guard let detail = try? await apiService.getNight(
+            nightId: nightId
+        ) else {
+            return
+        }
+
+        joinCode = detail.join_code ?? ""
+        participantCount = max(detail.participant_count, 1)
     }
 
     private var background: some View {
@@ -269,6 +293,10 @@ struct ActiveNightView: View {
 
             trackingStatusCard
 
+            if !joinCode.isEmpty {
+                inviteCard
+            }
+
             VStack(spacing: 7) {
                 Text("Put your phone away.")
                     .font(.headline)
@@ -373,6 +401,76 @@ struct ActiveNightView: View {
                 Color.white.opacity(0.04),
                 lineWidth: 1
             )
+        }
+    }
+
+    private var inviteCard: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("INVITE CODE")
+                    .font(.caption2)
+                    .fontWeight(.semibold)
+                    .tracking(1.2)
+                    .foregroundStyle(
+                        Color.white.opacity(0.45)
+                    )
+
+                Text(joinCode)
+                    .font(
+                        .system(
+                            size: 22,
+                            weight: .bold,
+                            design: .rounded
+                        )
+                    )
+                    .foregroundStyle(.white)
+                    .tracking(2)
+            }
+
+            Spacer()
+
+            HStack(spacing: 5) {
+                Image(systemName: "person.2.fill")
+                    .font(.caption)
+
+                Text("\(participantCount)")
+                    .font(
+                        .system(
+                            size: 15,
+                            weight: .semibold
+                        )
+                    )
+            }
+            .foregroundStyle(
+                Color.white.opacity(0.75)
+            )
+
+            ShareLink(
+                item: "Join my AFTR Night with code \(joinCode)"
+            ) {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(neonPink)
+                    .frame(width: 38, height: 38)
+                    .background(
+                        neonPink.opacity(0.12)
+                    )
+                    .clipShape(Circle())
+            }
+        }
+        .padding(16)
+        .background(
+            Color.white.opacity(0.05)
+        )
+        .clipShape(
+            RoundedRectangle(cornerRadius: 18)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(
+                    neonPink.opacity(0.12),
+                    lineWidth: 1
+                )
         }
     }
 
