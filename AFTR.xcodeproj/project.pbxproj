@@ -45,6 +45,11 @@
 			path = Recap;
 			sourceTree = "<group>";
 		};
+		928C8B55304077A8008E68EA /* Auth */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		928C8B5C304078C3008E68EA /* Home */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Home;
@@ -97,11 +102,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		928C8B55304077A8008E68EA /* Auth */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Auth;
-			sourceTree = "<group>";
-		};
 		928C8B56304077A8008E68EA /* Screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,8 +132,8 @@
 				92447C9D30409C8B00FEDCB2 /* Night */,
 				92447CA13041AE7E00FEDCB2 /* Models */,
 				92447CA53041AF6300FEDCB2 /* Recap */,
-				928C8B5C304078C3008E68EA /* Home */,
 				928C8B55304077A8008E68EA /* Auth */,
+				928C8B5C304078C3008E68EA /* Home */,
 			);
 			name = AFTR;
 			packageProductDependencies = (

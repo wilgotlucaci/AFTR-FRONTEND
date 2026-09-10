@@ -11,6 +11,11 @@ struct RecapView: View {
 
     @State private var media: [NightMedia] = []
     @State private var showAddPhotos = false
+    @State private var viewerStart: ViewerStart?
+
+    private struct ViewerStart: Identifiable {
+        let id: Int
+    }
 
     private let apiService = APIService()
 
@@ -72,6 +77,9 @@ struct RecapView: View {
         .task {
             await loadRecap()
             await loadMedia()
+        }
+        .fullScreenCover(item: $viewerStart) { start in
+            PhotoViewerView(media: media, startIndex: start.id)
         }
         .sheet(isPresented: $showAddPhotos) {
             if let recap {
@@ -1128,8 +1136,14 @@ struct RecapView: View {
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                        ForEach(media) { item in
+                        ForEach(
+                            Array(media.enumerated()),
+                            id: \.element.id
+                        ) { index, item in
                             momentCell(item)
+                                .onTapGesture {
+                                    viewerStart = ViewerStart(id: index)
+                                }
                         }
                     }
                 }
