@@ -24,9 +24,9 @@ struct AppleSignInButton: View {
             } onCompletion: { result in
                 handle(result)
             }
-            .signInWithAppleButtonStyle(.white)
+            .signInWithAppleButtonStyle(.whiteOutline)
             .clipShape(RoundedRectangle(cornerRadius: 17))
-            .opacity(isWorking ? 0.6 : 1)
+            .opacity(isWorking ? 0.55 : 1)
             .allowsHitTesting(!isWorking)
 
             if !errorText.isEmpty {

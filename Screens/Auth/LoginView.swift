@@ -48,7 +48,7 @@ struct LoginView: View {
                 .padding(.vertical, 16)
 
                 AppleSignInButton(isLoggedIn: $isLoggedIn)
-                    .frame(height: 52)
+                    .frame(height: 56)
 
                 Spacer()
 

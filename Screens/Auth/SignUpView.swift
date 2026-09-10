@@ -45,7 +45,7 @@ struct SignUpView: View {
                 appleDivider
 
                 AppleSignInButton(isLoggedIn: $isLoggedIn)
-                    .frame(height: 52)
+                    .frame(height: 56)
 
                 Spacer()
 
