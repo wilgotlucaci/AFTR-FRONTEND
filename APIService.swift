@@ -1,5 +1,26 @@
 import Foundation
 
+/// App-wide configuration.
+///
+/// `apiBaseURL` defaults to the local dev server. To point a build at a
+/// deployed backend, add an `API_BASE_URL` string key to Info.plist - no
+/// code change needed.
+///
+/// Note: `127.0.0.1` only works in the iOS Simulator. On a physical
+/// device, use your Mac's LAN address or a hosted URL.
+enum AppConfig {
+    static let apiBaseURL: String = {
+        if let configured = Bundle.main.object(
+            forInfoDictionaryKey: "API_BASE_URL"
+        ) as? String,
+        !configured.isEmpty {
+            return configured
+        }
+
+        return "http://127.0.0.1:8000"
+    }()
+}
+
 struct CreateNightResponse: Decodable {
     let id: String
     let title: String
@@ -26,7 +47,7 @@ struct NightDetailParticipant: Decodable, Identifiable {
 
 final class APIService {
     private let authService = AuthService()
-    private let baseURL = "http://127.0.0.1:8000"
+    private let baseURL = AppConfig.apiBaseURL
 
     func createNight(
         title: String
