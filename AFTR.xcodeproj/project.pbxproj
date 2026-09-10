@@ -6,14 +6,83 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		928C8B3A303F291B008E68EA /* SupabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B39303F2913008E68EA /* SupabaseManager.swift */; };
+		928C8B3D303F29DB008E68EA /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 928C8B3C303F29DB008E68EA /* Supabase */; };
+		928C8B3F303F2A0E008E68EA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B3E303F2A0B008E68EA /* AuthService.swift */; };
+		928C8B41303F2A9A008E68EA /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B40303F2A97008E68EA /* APIService.swift */; };
+		928C8B45303F2E0D008E68EA /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B44303F2E05008E68EA /* LocationManager.swift */; };
+		928C8B57304077A8008E68EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 928C8B50304077A8008E68EA /* Assets.xcassets */; };
+		928C8B59304077A8008E68EA /* AFTRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B4E304077A8008E68EA /* AFTRApp.swift */; };
+		928C8B5A304077A8008E68EA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B52304077A8008E68EA /* ContentView.swift */; };
+		928C8B5E30407941008E68EA /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B5B30407835008E68EA /* LoginView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		928C8B2A303F28B5008E68EA /* AFTR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AFTR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		928C8B39303F2913008E68EA /* SupabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseManager.swift; sourceTree = "<group>"; };
+		928C8B3E303F2A0B008E68EA /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		928C8B40303F2A97008E68EA /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		928C8B44303F2E05008E68EA /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		928C8B4E304077A8008E68EA /* AFTRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFTRApp.swift; sourceTree = "<group>"; };
+		928C8B50304077A8008E68EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		928C8B52304077A8008E68EA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		928C8B54304077A8008E68EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		928C8B5B30407835008E68EA /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		92447CA030409DE700FEDCB2 /* Exceptions for "Night" folder in "AFTR" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ActiveNightView.swift,
+			);
+			target = 928C8B29303F28B5008E68EA /* AFTR */;
+		};
+		92447CAC3041B05C00FEDCB2 /* Exceptions for "Recap" folder in "AFTR" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				RecapView.swift,
+			);
+			target = 928C8B29303F28B5008E68EA /* AFTR */;
+		};
+		928C8B603040794C008E68EA /* Exceptions for "Home" folder in "AFTR" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				HomeView.swift,
+			);
+			target = 928C8B29303F28B5008E68EA /* AFTR */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		928C8B2C303F28B5008E68EA /* AFTR */ = {
+		92447C9D30409C8B00FEDCB2 /* Night */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = AFTR;
+			exceptions = (
+				92447CA030409DE700FEDCB2 /* Exceptions for "Night" folder in "AFTR" target */,
+			);
+			path = Night;
+			sourceTree = "<group>";
+		};
+		92447CA13041AE7E00FEDCB2 /* Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		92447CA53041AF6300FEDCB2 /* Recap */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				92447CAC3041B05C00FEDCB2 /* Exceptions for "Recap" folder in "AFTR" target */,
+			);
+			path = Recap;
+			sourceTree = "<group>";
+		};
+		928C8B5C304078C3008E68EA /* Home */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				928C8B603040794C008E68EA /* Exceptions for "Home" folder in "AFTR" target */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				928C8B3D303F29DB008E68EA /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,7 +102,17 @@
 		928C8B21303F28B5008E68EA = {
 			isa = PBXGroup;
 			children = (
-				928C8B2C303F28B5008E68EA /* AFTR */,
+				92447CA13041AE7E00FEDCB2 /* Models */,
+				928C8B4E304077A8008E68EA /* AFTRApp.swift */,
+				928C8B50304077A8008E68EA /* Assets.xcassets */,
+				928C8B52304077A8008E68EA /* ContentView.swift */,
+				928C8B54304077A8008E68EA /* Info.plist */,
+				928C8B56304077A8008E68EA /* Screens */,
+				928C8B44303F2E05008E68EA /* LocationManager.swift */,
+				928C8B40303F2A97008E68EA /* APIService.swift */,
+				928C8B3E303F2A0B008E68EA /* AuthService.swift */,
+				928C8B39303F2913008E68EA /* SupabaseManager.swift */,
+				928C8B3B303F29CB008E68EA /* Frameworks */,
 				928C8B2B303F28B5008E68EA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +123,32 @@
 				928C8B2A303F28B5008E68EA /* AFTR.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		928C8B3B303F29CB008E68EA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		928C8B55304077A8008E68EA /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				928C8B5B30407835008E68EA /* LoginView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		928C8B56304077A8008E68EA /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				92447CA53041AF6300FEDCB2 /* Recap */,
+				92447C9D30409C8B00FEDCB2 /* Night */,
+				928C8B5C304078C3008E68EA /* Home */,
+				928C8B55304077A8008E68EA /* Auth */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -61,10 +167,11 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				928C8B2C303F28B5008E68EA /* AFTR */,
+				92447CA13041AE7E00FEDCB2 /* Models */,
 			);
 			name = AFTR;
 			packageProductDependencies = (
+				928C8B3C303F29DB008E68EA /* Supabase */,
 			);
 			productName = AFTR;
 			productReference = 928C8B2A303F28B5008E68EA /* AFTR.app */;
@@ -94,6 +201,9 @@
 			);
 			mainGroup = 928C8B21303F28B5008E68EA;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				928C8B38303F28F8008E68EA /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 928C8B2B303F28B5008E68EA /* Products */;
 			projectDirPath = "";
@@ -109,6 +219,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				928C8B57304077A8008E68EA /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +230,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				928C8B3A303F291B008E68EA /* SupabaseManager.swift in Sources */,
+				928C8B5E30407941008E68EA /* LoginView.swift in Sources */,
+				928C8B41303F2A9A008E68EA /* APIService.swift in Sources */,
+				928C8B45303F2E0D008E68EA /* LocationManager.swift in Sources */,
+				928C8B3F303F2A0E008E68EA /* AuthService.swift in Sources */,
+				928C8B59304077A8008E68EA /* AFTRApp.swift in Sources */,
+				928C8B5A304077A8008E68EA /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +372,9 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "AFTR uses your location during an active Night, including when the app is in the background.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Privacy - Location When In Use Usage Description";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -298,6 +419,9 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "AFTR uses your location during an active Night, including when the app is in the background.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Privacy - Location When In Use Usage Description";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -351,6 +475,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		928C8B38303F28F8008E68EA /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		928C8B3C303F29DB008E68EA /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 928C8B38303F28F8008E68EA /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 928C8B22303F28B5008E68EA /* Project object */;
 }
