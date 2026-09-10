@@ -322,11 +322,17 @@ struct ActiveNightView: View {
                     .multilineTextAlignment(.center)
             }
 
-            if let error = locationManager.lastError {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-                    .multilineTextAlignment(.center)
+            // Only surface a permanent, actionable location problem -
+            // transient CoreLocation errors are noise on this screen.
+            if locationManager.authorizationStatus == .denied
+                || locationManager.authorizationStatus == .restricted {
+                Text(
+                    "Location is off for AFTR. Turn it on in Settings so we can build your recap."
+                )
+                .font(.caption)
+                .foregroundStyle(Color.orange.opacity(0.9))
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 24)
             }
         }
     }
