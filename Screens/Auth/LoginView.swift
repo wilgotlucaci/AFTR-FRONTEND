@@ -38,6 +38,18 @@ struct LoginView: View {
 
                 loginForm
 
+                HStack(spacing: 12) {
+                    Rectangle().fill(Color.white.opacity(0.12)).frame(height: 1)
+                    Text("or")
+                        .font(.caption2)
+                        .foregroundStyle(Color.white.opacity(0.4))
+                    Rectangle().fill(Color.white.opacity(0.12)).frame(height: 1)
+                }
+                .padding(.vertical, 16)
+
+                AppleSignInButton(isLoggedIn: $isLoggedIn)
+                    .frame(height: 52)
+
                 Spacer()
 
                 Button {
