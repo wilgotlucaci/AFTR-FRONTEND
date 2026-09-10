@@ -37,24 +37,9 @@ struct HomeView: View {
 
             if let selectedNight {
                 RecapView(
-                    nightId: selectedNight.id
+                    nightId: selectedNight.id,
+                    onBack: { self.selectedNight = nil }
                 )
-                .overlay(alignment: .topLeading) {
-                    Button {
-                        self.selectedNight = nil
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .font(.headline)
-                            .foregroundStyle(.white)
-                            .frame(width: 42, height: 42)
-                            .background(
-                                Color.black.opacity(0.65)
-                            )
-                            .clipShape(Circle())
-                    }
-                    .padding(.leading, 16)
-                    .padding(.top, 8)
-                }
 
             } else {
                 ScrollView {
@@ -76,11 +61,28 @@ struct HomeView: View {
                     .padding(.bottom, 40)
                 }
                 .scrollIndicators(.hidden)
+                .overlay(alignment: .top) { statusBarScrim }
             }
         }
         .task {
             await loadNights()
         }
+    }
+
+    private var statusBarScrim: some View {
+        LinearGradient(
+            colors: [
+                Color.black,
+                Color.black.opacity(0.92),
+                Color.black.opacity(0)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .frame(height: 60)
+        .frame(maxWidth: .infinity, alignment: .top)
+        .ignoresSafeArea(edges: .top)
+        .allowsHitTesting(false)
     }
 
     private var background: some View {

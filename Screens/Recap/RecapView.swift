@@ -3,6 +3,7 @@ import MapKit
 
 struct RecapView: View {
     let nightId: String
+    var onBack: (() -> Void)? = nil
 
     @State private var recap: RecapModel?
     @State private var isLoading = true
@@ -67,6 +68,7 @@ struct RecapView: View {
                 errorView
             }
         }
+        .overlay(alignment: .top) { statusBarScrim }
         .task {
             await loadRecap()
             await loadMedia()
@@ -150,12 +152,39 @@ struct RecapView: View {
         }
     }
 
+    private var statusBarScrim: some View {
+        LinearGradient(
+            colors: [
+                Color.black,
+                Color.black.opacity(0.92),
+                Color.black.opacity(0)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .frame(height: 60)
+        .frame(maxWidth: .infinity, alignment: .top)
+        .ignoresSafeArea(edges: .top)
+        .allowsHitTesting(false)
+    }
+
     private func heroSection(
         _ recap: RecapModel
     ) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 HStack(spacing: 10) {
+                    if let onBack {
+                        Button(action: onBack) {
+                            Image(systemName: "chevron.left")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                                .frame(width: 38, height: 38)
+                                .background(Color.white.opacity(0.08))
+                                .clipShape(Circle())
+                        }
+                    }
+
                     aftrLogo
 
                     Text("AFTR")
