@@ -43,12 +43,14 @@ struct LoginView: View {
                 Button {
                     showSignUp = true
                 } label: {
-                    Text("New here?  ")
-                        .foregroundStyle(Color.white.opacity(0.45))
-                    + Text("Create an account")
-                        .foregroundStyle(softPink)
+                    HStack(spacing: 0) {
+                        Text("New here?  ")
+                            .foregroundStyle(Color.white.opacity(0.45))
+                        Text("Create an account")
+                            .foregroundStyle(softPink)
+                    }
+                    .font(.footnote)
                 }
-                .font(.footnote)
                 .padding(.bottom, 14)
 
                 footer

@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreLocation
 
 struct ActiveNightView: View {
     let nightId: String

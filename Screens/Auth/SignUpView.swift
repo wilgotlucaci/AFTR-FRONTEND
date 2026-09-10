@@ -47,12 +47,14 @@ struct SignUpView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("Already have an account?  ")
-                        .foregroundStyle(Color.white.opacity(0.45))
-                    + Text("Log in")
-                        .foregroundStyle(softPink)
+                    HStack(spacing: 0) {
+                        Text("Already have an account?  ")
+                            .foregroundStyle(Color.white.opacity(0.45))
+                        Text("Log in")
+                            .foregroundStyle(softPink)
+                    }
+                    .font(.footnote)
                 }
-                .font(.footnote)
                 .padding(.bottom, 8)
             }
             .padding(.horizontal, 22)
