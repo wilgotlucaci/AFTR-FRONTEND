@@ -31,36 +31,9 @@
 		928C8B5B30407835008E68EA /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		92447CA030409DE700FEDCB2 /* Exceptions for "Night" folder in "AFTR" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				ActiveNightView.swift,
-			);
-			target = 928C8B29303F28B5008E68EA /* AFTR */;
-		};
-		92447CAC3041B05C00FEDCB2 /* Exceptions for "Recap" folder in "AFTR" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				RecapView.swift,
-			);
-			target = 928C8B29303F28B5008E68EA /* AFTR */;
-		};
-		928C8B603040794C008E68EA /* Exceptions for "Home" folder in "AFTR" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				HomeView.swift,
-			);
-			target = 928C8B29303F28B5008E68EA /* AFTR */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		92447C9D30409C8B00FEDCB2 /* Night */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				92447CA030409DE700FEDCB2 /* Exceptions for "Night" folder in "AFTR" target */,
-			);
 			path = Night;
 			sourceTree = "<group>";
 		};
@@ -71,17 +44,11 @@
 		};
 		92447CA53041AF6300FEDCB2 /* Recap */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				92447CAC3041B05C00FEDCB2 /* Exceptions for "Recap" folder in "AFTR" target */,
-			);
 			path = Recap;
 			sourceTree = "<group>";
 		};
 		928C8B5C304078C3008E68EA /* Home */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				928C8B603040794C008E68EA /* Exceptions for "Home" folder in "AFTR" target */,
-			);
 			path = Home;
 			sourceTree = "<group>";
 		};
@@ -168,6 +135,9 @@
 			);
 			fileSystemSynchronizedGroups = (
 				92447CA13041AE7E00FEDCB2 /* Models */,
+				928C8B5C304078C3008E68EA /* Home */,
+				92447C9D30409C8B00FEDCB2 /* Night */,
+				92447CA53041AF6300FEDCB2 /* Recap */,
 			);
 			name = AFTR;
 			packageProductDependencies = (
