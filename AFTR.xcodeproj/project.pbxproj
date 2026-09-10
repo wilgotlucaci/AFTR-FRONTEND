@@ -15,7 +15,6 @@
 		928C8B57304077A8008E68EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 928C8B50304077A8008E68EA /* Assets.xcassets */; };
 		928C8B59304077A8008E68EA /* AFTRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B4E304077A8008E68EA /* AFTRApp.swift */; };
 		928C8B5A304077A8008E68EA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B52304077A8008E68EA /* ContentView.swift */; };
-		928C8B5E30407941008E68EA /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B5B30407835008E68EA /* LoginView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,7 +27,6 @@
 		928C8B50304077A8008E68EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		928C8B52304077A8008E68EA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		928C8B54304077A8008E68EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		928C8B5B30407835008E68EA /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -100,10 +98,7 @@
 			sourceTree = "<group>";
 		};
 		928C8B55304077A8008E68EA /* Auth */ = {
-			isa = PBXGroup;
-			children = (
-				928C8B5B30407835008E68EA /* LoginView.swift */,
-			);
+			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Auth;
 			sourceTree = "<group>";
 		};
@@ -138,6 +133,7 @@
 				92447CA13041AE7E00FEDCB2 /* Models */,
 				92447CA53041AF6300FEDCB2 /* Recap */,
 				928C8B5C304078C3008E68EA /* Home */,
+				928C8B55304077A8008E68EA /* Auth */,
 			);
 			name = AFTR;
 			packageProductDependencies = (
@@ -201,7 +197,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				928C8B3A303F291B008E68EA /* SupabaseManager.swift in Sources */,
-				928C8B5E30407941008E68EA /* LoginView.swift in Sources */,
 				928C8B41303F2A9A008E68EA /* APIService.swift in Sources */,
 				928C8B45303F2E0D008E68EA /* LocationManager.swift in Sources */,
 				928C8B3F303F2A0E008E68EA /* AuthService.swift in Sources */,
