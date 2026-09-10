@@ -1,4 +1,5 @@
 import Foundation
+import CoreLocation
 
 struct RecapModel: Decodable {
     let night_id: String
@@ -15,6 +16,9 @@ struct RecapModel: Decodable {
     let movement_stats: MovementStats
 
     let fun_highlights: [FunHighlight]
+
+    // Added after some recaps were already saved, so it is optional.
+    let route: [RouteParticipant]?
 }
 
 struct RecapParticipant: Decodable, Identifiable {
@@ -70,6 +74,16 @@ struct VenueTimelineItem: Decodable, Identifiable {
     let arrived_at: String
     let left_at: String
     let duration_minutes: Double?
+    let latitude: Double?
+    let longitude: Double?
+
+    var coordinate: CLLocationCoordinate2D? {
+        guard let latitude, let longitude else { return nil }
+        return CLLocationCoordinate2D(
+            latitude: latitude,
+            longitude: longitude
+        )
+    }
 }
 
 struct VenueStats: Decodable {
@@ -84,4 +98,26 @@ struct MovementStats: Decodable {
     let fast_movement_minutes: Double
     let vehicle_minutes: Double
     let unknown_minutes: Double
+}
+
+struct RouteParticipant: Decodable, Identifiable {
+    let participant_id: String
+    let name: String
+    let points: [RoutePoint]
+
+    var id: String { participant_id }
+
+    var coordinates: [CLLocationCoordinate2D] {
+        points.map(\.coordinate)
+    }
+}
+
+struct RoutePoint: Decodable {
+    let lat: Double
+    let lon: Double
+    let t: String
+
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
 }

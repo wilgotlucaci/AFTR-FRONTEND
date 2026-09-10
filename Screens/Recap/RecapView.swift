@@ -1,4 +1,5 @@
 import SwiftUI
+import MapKit
 
 struct RecapView: View {
     let nightId: String
@@ -38,6 +39,10 @@ struct RecapView: View {
 
                         if !recap.fun_highlights.isEmpty {
                             funHighlightsSection(recap)
+                        }
+
+                        if hasRoute(recap) {
+                            routeMapSection(recap)
                         }
 
                         if !recap.venue_timeline.isEmpty {
@@ -393,6 +398,132 @@ struct RecapView: View {
                 lineWidth: 1
             )
         }
+    }
+
+    private func hasRoute(
+        _ recap: RecapModel
+    ) -> Bool {
+        (recap.route ?? []).contains { participant in
+            participant.points.count >= 2
+        }
+    }
+
+    private func routeMapSection(
+        _ recap: RecapModel
+    ) -> some View {
+        let routes = recap.route ?? []
+
+        let allCoordinates = routes.flatMap { participant in
+            participant.coordinates
+        }
+
+        return VStack(alignment: .leading, spacing: 14) {
+            sectionTitle("THE ROUTE")
+
+            Map(
+                initialPosition: .region(
+                    Self.region(for: allCoordinates)
+                )
+            ) {
+                ForEach(routes) { participant in
+                    MapPolyline(
+                        coordinates: participant.coordinates
+                    )
+                    .stroke(
+                        neonPink.opacity(0.9),
+                        style: StrokeStyle(
+                            lineWidth: 3,
+                            lineCap: .round,
+                            lineJoin: .round
+                        )
+                    )
+                }
+
+                ForEach(recap.venue_timeline) { venue in
+                    if let coordinate = venue.coordinate {
+                        Annotation(
+                            venue.venue_name,
+                            coordinate: coordinate
+                        ) {
+                            ZStack {
+                                Circle()
+                                    .fill(neonPink)
+                                    .frame(width: 12, height: 12)
+
+                                Circle()
+                                    .stroke(
+                                        Color.white.opacity(0.9),
+                                        lineWidth: 2
+                                    )
+                                    .frame(width: 12, height: 12)
+                            }
+                            .shadow(
+                                color: neonPink.opacity(0.8),
+                                radius: 6
+                            )
+                        }
+                        .annotationTitles(.hidden)
+                    }
+                }
+            }
+            .mapStyle(
+                .standard(pointsOfInterest: .excludingAll)
+            )
+            .mapControlVisibility(.hidden)
+            .frame(height: 240)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 20)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(
+                        neonPink.opacity(0.12),
+                        lineWidth: 1
+                    )
+            }
+            .allowsHitTesting(false)
+            .environment(\.colorScheme, .dark)
+        }
+    }
+
+    private static func region(
+        for coordinates: [CLLocationCoordinate2D]
+    ) -> MKCoordinateRegion {
+        guard !coordinates.isEmpty else {
+            return MKCoordinateRegion(
+                center: CLLocationCoordinate2D(
+                    latitude: 0,
+                    longitude: 0
+                ),
+                span: MKCoordinateSpan(
+                    latitudeDelta: 0.05,
+                    longitudeDelta: 0.05
+                )
+            )
+        }
+
+        let latitudes = coordinates.map(\.latitude)
+        let longitudes = coordinates.map(\.longitude)
+
+        let minLat = latitudes.min() ?? 0
+        let maxLat = latitudes.max() ?? 0
+        let minLon = longitudes.min() ?? 0
+        let maxLon = longitudes.max() ?? 0
+
+        let center = CLLocationCoordinate2D(
+            latitude: (minLat + maxLat) / 2,
+            longitude: (minLon + maxLon) / 2
+        )
+
+        let span = MKCoordinateSpan(
+            latitudeDelta: max((maxLat - minLat) * 1.4, 0.005),
+            longitudeDelta: max((maxLon - minLon) * 1.4, 0.005)
+        )
+
+        return MKCoordinateRegion(
+            center: center,
+            span: span
+        )
     }
 
     private func venueTimelineSection(
