@@ -98,6 +98,8 @@ enum PhotoSelector {
         let filename: String
     }
 
+    /// A downscaled JPEG of the asset - recap photos don't need 12 MP,
+    /// and a ~2048 px JPEG uploads roughly 10x faster than the original.
     static func uploadBytes(
         for asset: PHAsset
     ) async -> MediaBytes? {
@@ -105,29 +107,20 @@ enum PhotoSelector {
             let options = PHImageRequestOptions()
             options.isNetworkAccessAllowed = true
             options.deliveryMode = .highQualityFormat
+            options.resizeMode = .exact
 
-            PHImageManager.default().requestImageDataAndOrientation(
+            PHImageManager.default().requestImage(
                 for: asset,
+                targetSize: CGSize(width: 2048, height: 2048),
+                contentMode: .aspectFit,
                 options: options
-            ) { data, uti, _, _ in
-                guard let data else {
+            ) { image, _ in
+                guard
+                    let image,
+                    let data = image.jpegData(compressionQuality: 0.8)
+                else {
                     continuation.resume(returning: nil)
                     return
-                }
-
-                let contentType: String
-                let ext: String
-
-                switch uti {
-                case "public.png":
-                    contentType = "image/png"
-                    ext = "png"
-                case "public.heic", "public.heif":
-                    contentType = "image/heic"
-                    ext = "heic"
-                default:
-                    contentType = "image/jpeg"
-                    ext = "jpg"
                 }
 
                 let stub = asset.localIdentifier
@@ -137,11 +130,39 @@ enum PhotoSelector {
                 continuation.resume(
                     returning: MediaBytes(
                         data: data,
-                        contentType: contentType,
-                        filename: "\(stub).\(ext)"
+                        contentType: "image/jpeg",
+                        filename: "\(stub).jpg"
                     )
                 )
             }
         }
+    }
+
+    /// Decode arbitrary image data and re-encode as a downscaled JPEG.
+    static func downscaledJPEG(
+        from data: Data,
+        maxDimension: CGFloat = 2048,
+        quality: CGFloat = 0.8
+    ) -> Data? {
+        guard let image = UIImage(data: data) else { return nil }
+
+        let longest = max(image.size.width, image.size.height)
+        let scale = min(1, maxDimension / max(longest, 1))
+
+        if scale >= 1 {
+            return image.jpegData(compressionQuality: quality)
+        }
+
+        let newSize = CGSize(
+            width: image.size.width * scale,
+            height: image.size.height * scale
+        )
+
+        let renderer = UIGraphicsImageRenderer(size: newSize)
+        let resized = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+
+        return resized.jpegData(compressionQuality: quality)
     }
 }

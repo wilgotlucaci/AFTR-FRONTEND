@@ -20,6 +20,7 @@ struct AddPhotosView: View {
     @State private var manualItems: [PhotosPickerItem] = []
     @State private var uploaded = 0
     @State private var failed = 0
+    @State private var uploadTotal = 0
 
     private let apiService = APIService()
 
@@ -56,7 +57,10 @@ struct AddPhotosView: View {
             case .empty:
                 emptyView
             case .uploading:
-                message("Adding photos…", spinner: true)
+                message(
+                    "Adding \(uploaded + failed) of \(uploadTotal)…",
+                    spinner: true
+                )
             case .done:
                 message(
                     failed == 0
@@ -274,34 +278,46 @@ struct AddPhotosView: View {
 
     // MARK: - Uploading
 
+    struct PendingUpload {
+        let data: Data
+        let filename: String
+        let takenAt: String?
+        let latitude: Double?
+        let longitude: Double?
+    }
+
     @MainActor
     private func uploadAssets() async {
-        phase = .uploading
-        uploaded = 0
-        failed = 0
-
         let formatter = ISO8601DateFormatter()
         let chosen = assets.filter {
             selected.contains($0.localIdentifier)
         }
 
+        phase = .uploading
+        uploaded = 0
+        failed = 0
+        uploadTotal = chosen.count
+
+        var pending: [PendingUpload] = []
         for asset in chosen {
             guard let bytes = await PhotoSelector.uploadBytes(for: asset)
             else {
                 failed += 1
                 continue
             }
-
-            await send(
-                data: bytes.data,
-                contentType: bytes.contentType,
-                filename: bytes.filename,
-                takenAt: asset.creationDate.map(formatter.string(from:)),
-                latitude: asset.location?.coordinate.latitude,
-                longitude: asset.location?.coordinate.longitude
+            pending.append(
+                PendingUpload(
+                    data: bytes.data,
+                    filename: bytes.filename,
+                    takenAt: asset.creationDate
+                        .map(formatter.string(from:)),
+                    latitude: asset.location?.coordinate.latitude,
+                    longitude: asset.location?.coordinate.longitude
+                )
             )
         }
 
+        await sendInParallel(pending)
         phase = .done
     }
 
@@ -310,75 +326,76 @@ struct AddPhotosView: View {
         phase = .uploading
         uploaded = 0
         failed = 0
+        uploadTotal = items.count
 
+        var pending: [PendingUpload] = []
         for (index, item) in items.enumerated() {
             guard
-                let data = try? await item.loadTransferable(
+                let raw = try? await item.loadTransferable(
                     type: Data.self
-                )
+                ),
+                let jpeg = PhotoSelector.downscaledJPEG(from: raw)
             else {
                 failed += 1
                 continue
             }
-
-            let contentType = Self.sniffContentType(data)
-            let ext = contentType.split(separator: "/").last ?? "jpg"
-
-            await send(
-                data: data,
-                contentType: contentType,
-                filename: "pick-\(index).\(ext)",
-                takenAt: nil,
-                latitude: nil,
-                longitude: nil
+            pending.append(
+                PendingUpload(
+                    data: jpeg,
+                    filename: "pick-\(index).jpg",
+                    takenAt: nil,
+                    latitude: nil,
+                    longitude: nil
+                )
             )
         }
 
+        await sendInParallel(pending)
         manualItems = []
         phase = .done
     }
 
+    /// Upload up to 3 at a time.
     @MainActor
-    private func send(
-        data: Data,
-        contentType: String,
-        filename: String,
-        takenAt: String?,
-        latitude: Double?,
-        longitude: Double?
-    ) async {
-        do {
-            _ = try await apiService.uploadMedia(
-                nightId: nightId,
-                data: data,
-                contentType: contentType,
-                filename: filename,
-                takenAt: takenAt,
-                latitude: latitude,
-                longitude: longitude
-            )
-            uploaded += 1
-        } catch {
-            failed += 1
+    private func sendInParallel(_ pending: [PendingUpload]) async {
+        guard !pending.isEmpty else { return }
+
+        let service = apiService
+        let night = nightId
+
+        await withTaskGroup(of: Bool.self) { group in
+            var next = 0
+
+            func submit() {
+                guard next < pending.count else { return }
+                let item = pending[next]
+                next += 1
+                group.addTask {
+                    do {
+                        _ = try await service.uploadMedia(
+                            nightId: night,
+                            data: item.data,
+                            contentType: "image/jpeg",
+                            filename: item.filename,
+                            takenAt: item.takenAt,
+                            latitude: item.latitude,
+                            longitude: item.longitude
+                        )
+                        return true
+                    } catch {
+                        return false
+                    }
+                }
+            }
+
+            for _ in 0..<min(3, pending.count) {
+                submit()
+            }
+
+            for await ok in group {
+                if ok { uploaded += 1 } else { failed += 1 }
+                submit()
+            }
         }
-    }
-
-    private static func sniffContentType(_ data: Data) -> String {
-        let bytes = [UInt8](data.prefix(12))
-
-        if bytes.count >= 4,
-           bytes[0] == 0x89, bytes[1] == 0x50,
-           bytes[2] == 0x4E, bytes[3] == 0x47 {
-            return "image/png"
-        }
-
-        if bytes.count >= 12,
-           bytes[4] == 0x66, bytes[5] == 0x74,
-           bytes[6] == 0x79, bytes[7] == 0x70 {
-            // ...ftyp... -> HEIC/HEIF container
-            return "image/heic"
-        }
-
-        return "image/jpeg"
     }
 }
