@@ -28,9 +28,10 @@ enum PhotoSelector {
         end: Date,
         near coordinates: [CLLocationCoordinate2D]
     ) -> [PHAsset] {
-        let grace: TimeInterval = 2 * 60 * 60
-        let windowStart = start.addingTimeInterval(-grace)
-        let windowEnd = end.addingTimeInterval(grace)
+        // People open AFTR after the night is underway and close it
+        // before they get home, so cast a wide net around the window.
+        let windowStart = start.addingTimeInterval(-4 * 60 * 60)
+        let windowEnd = end.addingTimeInterval(8 * 60 * 60)
 
         let options = PHFetchOptions()
         options.predicate = NSPredicate(
