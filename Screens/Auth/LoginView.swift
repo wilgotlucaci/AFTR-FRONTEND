@@ -8,6 +8,7 @@ struct LoginView: View {
     @State private var status = ""
     @State private var isLoading = false
     @State private var showPassword = false
+    @State private var showSignUp = false
 
     private let authService = AuthService()
 
@@ -39,10 +40,24 @@ struct LoginView: View {
 
                 Spacer()
 
+                Button {
+                    showSignUp = true
+                } label: {
+                    Text("New here?  ")
+                        .foregroundStyle(Color.white.opacity(0.45))
+                    + Text("Create an account")
+                        .foregroundStyle(softPink)
+                }
+                .font(.footnote)
+                .padding(.bottom, 14)
+
                 footer
             }
             .padding(.horizontal, 22)
             .padding(.bottom, 22)
+        }
+        .fullScreenCover(isPresented: $showSignUp) {
+            SignUpView(isLoggedIn: $isLoggedIn)
         }
     }
 

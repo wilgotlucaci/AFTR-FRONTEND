@@ -14,6 +14,26 @@ final class AuthService {
         )
     }
 
+    /// Creates the account. Returns true if a session is active
+    /// immediately (email confirmation disabled), false if the user
+    /// still needs to confirm via email before logging in.
+    func signUp(
+        email: String,
+        password: String
+    ) async throws -> Bool {
+        try await client.auth.signUp(
+            email: email,
+            password: password
+        )
+
+        do {
+            _ = try await client.auth.session
+            return true
+        } catch {
+            return false
+        }
+    }
+
     func signOut() async {
         try? await client.auth.signOut()
     }

@@ -91,6 +91,39 @@ final class APIService {
         )
     }
 
+    func register(name: String) async throws {
+        let token = try await authService.accessToken()
+
+        guard let url = URL(
+            string: "\(baseURL)/users"
+        ) else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+
+        request.setValue(
+            "application/json",
+            forHTTPHeaderField: "Content-Type"
+        )
+
+        request.setValue(
+            "Bearer \(token)",
+            forHTTPHeaderField: "Authorization"
+        )
+
+        request.httpBody = try JSONSerialization.data(
+            withJSONObject: ["name": name]
+        )
+
+        let (_, response) = try await URLSession.shared.data(
+            for: request
+        )
+
+        try validate(response)
+    }
+
     func getNights() async throws -> [NightSummary] {
         let token = try await authService.accessToken()
 
