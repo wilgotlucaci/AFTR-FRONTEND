@@ -12,6 +12,7 @@ struct SignUpView: View {
     @State private var isError = false
     @State private var isLoading = false
     @State private var showPassword = false
+    @State private var showPhoneSignUp = false
 
     private let authService = AuthService()
     private let apiService = APIService()
@@ -42,6 +43,18 @@ struct SignUpView: View {
 
                 form
 
+                Button {
+                    showPhoneSignUp = true
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "phone.fill")
+                        Text("Sign up with a phone number")
+                    }
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(softPink)
+                }
+                .padding(.top, 18)
+
                 Spacer()
 
                 Button {
@@ -59,6 +72,9 @@ struct SignUpView: View {
             }
             .padding(.horizontal, 22)
             .padding(.bottom, 22)
+        }
+        .fullScreenCover(isPresented: $showPhoneSignUp) {
+            PhoneSignUpView(isLoggedIn: $isLoggedIn)
         }
     }
 

@@ -38,6 +38,21 @@ final class AuthService {
         try? await client.auth.signOut()
     }
 
+    /// Sends a 6-digit SMS code to `phone` (E.164, e.g. "+46701234567").
+    /// Creates the account if it doesn't exist yet.
+    func startPhoneVerification(phone: String) async throws {
+        try await client.auth.signInWithOTP(phone: phone)
+    }
+
+    /// Verifies the SMS code and starts a session.
+    func verifyPhone(phone: String, code: String) async throws {
+        _ = try await client.auth.verifyOTP(
+            phone: phone,
+            token: code,
+            type: .sms
+        )
+    }
+
     func accessToken() async throws -> String {
         let session = try await client.auth.session
         return session.accessToken
