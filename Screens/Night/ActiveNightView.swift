@@ -14,6 +14,12 @@ struct ActiveNightView: View {
     @State private var joinCode = ""
     @State private var participantCount = 1
 
+    @AppStorage("autoEndAtHome") private var autoEndAtHome = true
+    @AppStorage("getHomeSafeEnabled") private var getHomeSafeEnabled = false
+    @State private var home: HomeLocation?
+    @State private var nearHomeSince: Date?
+    @State private var showSafeWalk = false
+
     @StateObject private var locationManager = LocationManager()
 
     private let apiService = APIService()
@@ -59,6 +65,7 @@ struct ActiveNightView: View {
             }
         }
         .task {
+            home = try? await apiService.getHome()
             while !Task.isCancelled {
                 await refreshDetail()
 
@@ -66,6 +73,44 @@ struct ActiveNightView: View {
                     for: .seconds(20)
                 )
             }
+        }
+        .onChange(of: locationManager.lastLocation?.timestamp) { _, _ in
+            checkAutoEnd(locationManager.lastLocation)
+        }
+        .fullScreenCover(isPresented: $showSafeWalk) {
+            if let home {
+                SafeWalkView(home: home) {
+                    showSafeWalk = false
+                    activeNightId = ""
+                }
+            }
+        }
+    }
+
+    private func checkAutoEnd(_ location: CLLocation?) {
+        guard autoEndAtHome,
+              !isEndingNight,
+              !showSafeWalk,
+              let location,
+              let home
+        else {
+            nearHomeSince = nil
+            return
+        }
+
+        let atHome = location.distance(from: home.location)
+            <= home.radius_meters
+
+        guard atHome else {
+            nearHomeSince = nil
+            return
+        }
+
+        if nearHomeSince == nil {
+            nearHomeSince = Date()
+        } else if Date().timeIntervalSince(nearHomeSince ?? Date()) >= 90 {
+            status = "You're home — wrapping up the Night."
+            endNight()
         }
     }
 
@@ -588,7 +633,20 @@ struct ActiveNightView: View {
                 await MainActor.run {
                     isEndingNight = false
                     status = "Recap generated"
-                    activeNightId = ""
+
+                    let awayFromHome: Bool = {
+                        guard let home,
+                              let loc = locationManager.lastLocation
+                        else { return true }
+                        return loc.distance(from: home.location)
+                            > home.radius_meters
+                    }()
+
+                    if getHomeSafeEnabled, home != nil, awayFromHome {
+                        showSafeWalk = true
+                    } else {
+                        activeNightId = ""
+                    }
                 }
 
             } catch {

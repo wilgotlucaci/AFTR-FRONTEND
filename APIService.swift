@@ -447,8 +447,10 @@ final class APIService {
     ) async throws {
         let token = try await authService.accessToken()
 
+        let lang = Locale.current.language.languageCode?.identifier ?? "en"
+
         guard let url = URL(
-            string: "\(baseURL)/nights/\(nightId)/end"
+            string: "\(baseURL)/nights/\(nightId)/end?lang=\(lang)"
         ) else {
             throw URLError(.badURL)
         }
@@ -466,6 +468,119 @@ final class APIService {
         )
 
         try validate(response)
+    }
+
+    // MARK: - Home location
+
+    func getHome() async throws -> HomeLocation? {
+        try await getJSON("/me/home")
+    }
+
+    @discardableResult
+    func setHome(
+        latitude: Double,
+        longitude: Double,
+        radiusMeters: Double = 120
+    ) async throws -> HomeLocation {
+        try await sendJSON(
+            "/me/home",
+            method: "PUT",
+            body: [
+                "latitude": latitude,
+                "longitude": longitude,
+                "radius_meters": radiusMeters,
+            ]
+        )
+    }
+
+    func clearHome() async throws {
+        _ = try await request("/me/home", method: "DELETE")
+    }
+
+    // MARK: - Monthly wrap
+
+    func getWrap(month: String? = nil) async throws -> MonthlyWrap {
+        let path = month.map { "/wrap?month=\($0)" } ?? "/wrap"
+        return try await getJSON(path)
+    }
+
+    // MARK: - Get home safe
+
+    func startSafeWalk() async throws -> SafeWalkStart {
+        try await sendJSON("/safewalks", method: "POST", body: [:])
+    }
+
+    func pingSafeWalk(
+        token: String,
+        latitude: Double,
+        longitude: Double
+    ) async throws {
+        _ = try await sendRaw(
+            "/safewalks/\(token)/ping",
+            method: "POST",
+            body: ["latitude": latitude, "longitude": longitude]
+        )
+    }
+
+    func arriveSafeWalk(token: String) async throws {
+        _ = try await sendRaw(
+            "/safewalks/\(token)/arrive",
+            method: "POST",
+            body: [:]
+        )
+    }
+
+    // MARK: - Small JSON helpers
+
+    private func authorizedRequest(
+        _ path: String,
+        method: String
+    ) async throws -> URLRequest {
+        let token = try await authService.accessToken()
+        guard let url = URL(string: "\(baseURL)\(path)") else {
+            throw URLError(.badURL)
+        }
+        var req = URLRequest(url: url)
+        req.httpMethod = method
+        req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return req
+    }
+
+    private func request(
+        _ path: String,
+        method: String
+    ) async throws -> Data {
+        let req = try await authorizedRequest(path, method: method)
+        let (data, response) = try await URLSession.shared.data(for: req)
+        try validate(response)
+        return data
+    }
+
+    private func getJSON<T: Decodable>(_ path: String) async throws -> T {
+        let data = try await request(path, method: "GET")
+        return try JSONDecoder().decode(T.self, from: data)
+    }
+
+    private func sendRaw(
+        _ path: String,
+        method: String,
+        body: [String: Any]
+    ) async throws -> Data {
+        var req = try await authorizedRequest(path, method: method)
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.httpBody = try JSONSerialization.data(withJSONObject: body)
+        let (data, response) = try await URLSession.shared.data(for: req)
+        try validate(response)
+        return data
+    }
+
+    private func sendJSON<T: Decodable>(
+        _ path: String,
+        method: String,
+        body: [String: Any]
+    ) async throws -> T {
+        let data = try await sendRaw(path, method: method, body: body)
+        return try JSONDecoder().decode(T.self, from: data)
     }
 
     private func validate(

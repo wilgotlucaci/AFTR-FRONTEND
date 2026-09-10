@@ -12,6 +12,9 @@ struct HomeView: View {
     @State private var joinCode = ""
     @State private var isJoiningNight = false
 
+    @State private var showWrap = false
+    @State private var showSettings = false
+
     @Binding var activeNightId: String
     @Binding var activeNightTitle: String
     @Binding var isLoggedIn: Bool
@@ -54,6 +57,31 @@ struct HomeView: View {
 
                         quickOverviewSection
 
+                        Button {
+                            showWrap = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "sparkles")
+                                Text("Your month in review")
+                                    .fontWeight(.semibold)
+                                Spacer()
+                                Image(systemName: "chevron.right").font(.caption)
+                            }
+                            .font(.subheadline)
+                            .foregroundStyle(.white)
+                            .padding(16)
+                            .background(
+                                LinearGradient(
+                                    colors: [
+                                        neonPink.opacity(0.14),
+                                        Color.white.opacity(0.05)
+                                    ],
+                                    startPoint: .leading, endPoint: .trailing
+                                )
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 18))
+                        }
+
                         recentNightsSection
                     }
                     .padding(.horizontal, 20)
@@ -66,6 +94,12 @@ struct HomeView: View {
         }
         .task {
             await loadNights()
+        }
+        .sheet(isPresented: $showWrap) {
+            MonthlyWrapView()
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView(isLoggedIn: $isLoggedIn)
         }
     }
 
@@ -134,6 +168,11 @@ struct HomeView: View {
             Spacer()
 
             Menu {
+                Button {
+                    showSettings = true
+                } label: {
+                    Label("Settings", systemImage: "gearshape")
+                }
                 Button(role: .destructive) {
                     signOut()
                 } label: {
