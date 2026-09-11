@@ -638,7 +638,7 @@ struct RecapView: View {
     private func movementCard(
         icon: String,
         value: Double,
-        label: String
+        label: LocalizedStringKey
     ) -> some View {
         HStack(spacing: 12) {
             ZStack {
@@ -787,7 +787,7 @@ struct RecapView: View {
     private func statCard(
         icon: String,
         value: String,
-        label: String,
+        label: LocalizedStringKey,
         accent: Color
     ) -> some View {
         VStack(spacing: 8) {
@@ -822,7 +822,7 @@ struct RecapView: View {
     }
 
     private func sectionTitle(
-        _ title: String
+        _ title: LocalizedStringKey
     ) -> some View {
         Text(title)
             .font(.caption2)
@@ -1021,7 +1021,11 @@ struct RecapView: View {
                 } label: {
                     HStack(spacing: 5) {
                         Image(systemName: "plus")
-                        Text(media.isEmpty ? "Add photos" : "Add")
+                        if media.isEmpty {
+                            Text("Add photos")
+                        } else {
+                            Text("Add")
+                        }
                     }
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(neonPink)
