@@ -4,8 +4,7 @@ struct ContentView: View {
     @State private var isCheckingSession = true
     @State private var isLoggedIn = false
 
-    @State private var activeNightId = ""
-    @State private var activeNightTitle = ""
+    @StateObject private var session = NightSession()
 
     private let authService = AuthService()
 
@@ -17,23 +16,32 @@ struct ContentView: View {
                 LoginView(
                     isLoggedIn: $isLoggedIn
                 )
-            } else if activeNightId.isEmpty {
-                HomeView(
-                    activeNightId: $activeNightId,
-                    activeNightTitle: $activeNightTitle,
-                    isLoggedIn: $isLoggedIn
-                )
             } else {
-                ActiveNightView(
-                    nightId: activeNightId,
-                    nightTitle: activeNightTitle,
-                    activeNightId: $activeNightId
-                )
+                HomeView(isLoggedIn: $isLoggedIn)
+                    .environmentObject(session)
             }
         }
         .task {
             isLoggedIn = await authService.hasValidSession()
             isCheckingSession = false
+        }
+        // Lives at the root so "get home safe" can be offered after a
+        // Night ends no matter which screen the user happens to be on.
+        .fullScreenCover(
+            isPresented: Binding(
+                get: { session.pendingSafeWalkHome != nil },
+                set: { isPresented in
+                    if !isPresented {
+                        session.pendingSafeWalkHome = nil
+                    }
+                }
+            )
+        ) {
+            if let home = session.pendingSafeWalkHome {
+                SafeWalkView(home: home) {
+                    session.pendingSafeWalkHome = nil
+                }
+            }
         }
     }
 }

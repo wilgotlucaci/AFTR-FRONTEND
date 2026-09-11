@@ -6,6 +6,8 @@
 	<string>https://aftr-backend.onrender.com</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>AFTR looks through photos taken during your Night to add them to the recap. Nothing is uploaded until you pick it.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

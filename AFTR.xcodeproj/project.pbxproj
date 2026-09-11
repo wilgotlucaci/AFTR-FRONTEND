@@ -16,9 +16,41 @@
 		928C8B59304077A8008E68EA /* AFTRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B4E304077A8008E68EA /* AFTRApp.swift */; };
 		928C8B5A304077A8008E68EA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C8B52304077A8008E68EA /* ContentView.swift */; };
 		92C7774F3053D41800433528 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 92C7774E3053D41800433528 /* Localizable.xcstrings */; };
+		92E701C33053E46300F7D8D3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E701C23053E46300F7D8D3 /* WidgetKit.framework */; };
+		92E701C53053E46300F7D8D3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E701C43053E46300F7D8D3 /* SwiftUI.framework */; };
+		92E701D43053E46400F7D8D3 /* AFTRWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 92E701C13053E46300F7D8D3 /* AFTRWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B6609857CC504F418440FDB6 /* NightSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22152EE91CD66CDC53A6E280 /* NightSession.swift */; };
+		B869BD9E36A2A800A9BF38DA /* AFTRWidgets/NightActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE14CE22E97A834829B338A /* AFTRWidgets/NightActivityAttributes.swift */; };
+		FF4666347922D57542D846A0 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 767B0AEE5E762B4336932D85 /* Supabase */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		92E701D23053E46400F7D8D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 928C8B22303F28B5008E68EA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92E701C03053E46300F7D8D3;
+			remoteInfo = AFTRWidgetsExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		92E701D53053E46400F7D8D3 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				92E701D43053E46400F7D8D3 /* AFTRWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		22152EE91CD66CDC53A6E280 /* NightSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightSession.swift; sourceTree = "<group>"; };
+		8AE14CE22E97A834829B338A /* AFTRWidgets/NightActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFTRWidgets/NightActivityAttributes.swift; sourceTree = "<group>"; };
 		928C8B2A303F28B5008E68EA /* AFTR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AFTR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		928C8B39303F2913008E68EA /* SupabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseManager.swift; sourceTree = "<group>"; };
 		928C8B3E303F2A0B008E68EA /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -29,7 +61,20 @@
 		928C8B52304077A8008E68EA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		928C8B54304077A8008E68EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92C7774E3053D41800433528 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		92E701C13053E46300F7D8D3 /* AFTRWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AFTRWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		92E701C23053E46300F7D8D3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		92E701C43053E46300F7D8D3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		92E701D83053E46400F7D8D3 /* Exceptions for "AFTRWidgets" folder in "AFTRWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 92E701C03053E46300F7D8D3 /* AFTRWidgetsExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		92447C9D30409C8B00FEDCB2 /* Night */ = {
@@ -57,6 +102,14 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		92E701C63053E46300F7D8D3 /* AFTRWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				92E701D83053E46400F7D8D3 /* Exceptions for "AFTRWidgets" folder in "AFTRWidgetsExtension" target */,
+			);
+			path = AFTRWidgets;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +118,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				928C8B3D303F29DB008E68EA /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92E701BE3053E46300F7D8D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92E701C53053E46300F7D8D3 /* SwiftUI.framework in Frameworks */,
+				92E701C33053E46300F7D8D3 /* WidgetKit.framework in Frameworks */,
+				FF4666347922D57542D846A0 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,9 +145,12 @@
 				928C8B54304077A8008E68EA /* Info.plist */,
 				928C8B56304077A8008E68EA /* Screens */,
 				928C8B44303F2E05008E68EA /* LocationManager.swift */,
+				22152EE91CD66CDC53A6E280 /* NightSession.swift */,
+				8AE14CE22E97A834829B338A /* AFTRWidgets/NightActivityAttributes.swift */,
 				928C8B40303F2A97008E68EA /* APIService.swift */,
 				928C8B3E303F2A0B008E68EA /* AuthService.swift */,
 				928C8B39303F2913008E68EA /* SupabaseManager.swift */,
+				92E701C63053E46300F7D8D3 /* AFTRWidgets */,
 				928C8B3B303F29CB008E68EA /* Frameworks */,
 				928C8B2B303F28B5008E68EA /* Products */,
 			);
@@ -94,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				928C8B2A303F28B5008E68EA /* AFTR.app */,
+				92E701C13053E46300F7D8D3 /* AFTRWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,6 +168,8 @@
 		928C8B3B303F29CB008E68EA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				92E701C23053E46300F7D8D3 /* WidgetKit.framework */,
+				92E701C43053E46300F7D8D3 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -126,10 +195,12 @@
 				928C8B26303F28B5008E68EA /* Sources */,
 				928C8B27303F28B5008E68EA /* Frameworks */,
 				928C8B28303F28B5008E68EA /* Resources */,
+				92E701D53053E46400F7D8D3 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				92E701D33053E46400F7D8D3 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				92447C9D30409C8B00FEDCB2 /* Night */,
@@ -146,6 +217,29 @@
 			productReference = 928C8B2A303F28B5008E68EA /* AFTR.app */;
 			productType = "com.apple.product-type.application";
 		};
+		92E701C03053E46300F7D8D3 /* AFTRWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92E701D93053E46400F7D8D3 /* Build configuration list for PBXNativeTarget "AFTRWidgetsExtension" */;
+			buildPhases = (
+				92E701BD3053E46300F7D8D3 /* Sources */,
+				92E701BE3053E46300F7D8D3 /* Frameworks */,
+				92E701BF3053E46300F7D8D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				92E701C63053E46300F7D8D3 /* AFTRWidgets */,
+			);
+			name = AFTRWidgetsExtension;
+			packageProductDependencies = (
+				767B0AEE5E762B4336932D85 /* Supabase */,
+			);
+			productName = AFTRWidgetsExtension;
+			productReference = 92E701C13053E46300F7D8D3 /* AFTRWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -157,6 +251,9 @@
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					928C8B29303F28B5008E68EA = {
+						CreatedOnToolsVersion = 26.6;
+					};
+					92E701C03053E46300F7D8D3 = {
 						CreatedOnToolsVersion = 26.6;
 					};
 				};
@@ -179,6 +276,7 @@
 			projectRoot = "";
 			targets = (
 				928C8B29303F28B5008E68EA /* AFTR */,
+				92E701C03053E46300F7D8D3 /* AFTRWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -193,6 +291,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		92E701BF3053E46300F7D8D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -203,13 +308,30 @@
 				928C8B3A303F291B008E68EA /* SupabaseManager.swift in Sources */,
 				928C8B41303F2A9A008E68EA /* APIService.swift in Sources */,
 				928C8B45303F2E0D008E68EA /* LocationManager.swift in Sources */,
+				B6609857CC504F418440FDB6 /* NightSession.swift in Sources */,
+				B869BD9E36A2A800A9BF38DA /* AFTRWidgets/NightActivityAttributes.swift in Sources */,
 				928C8B3F303F2A0E008E68EA /* AuthService.swift in Sources */,
 				928C8B59304077A8008E68EA /* AFTRApp.swift in Sources */,
 				928C8B5A304077A8008E68EA /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		92E701BD3053E46300F7D8D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		92E701D33053E46400F7D8D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92E701C03053E46300F7D8D3 /* AFTRWidgetsExtension */;
+			targetProxy = 92E701D23053E46400F7D8D3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		928C8B33303F28B6008E68EA /* Debug */ = {
@@ -426,6 +548,73 @@
 			};
 			name = Release;
 		};
+		92E701D63053E46400F7D8D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = AFTRWidgets/AFTRWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5VLR7MRPZQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AFTRWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AFTRWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wilgot.AFTR.AFTRWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		92E701D73053E46400F7D8D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = AFTRWidgets/AFTRWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5VLR7MRPZQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AFTRWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AFTRWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wilgot.AFTR.AFTRWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -447,6 +636,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		92E701D93053E46400F7D8D3 /* Build configuration list for PBXNativeTarget "AFTRWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92E701D63053E46400F7D8D3 /* Debug */,
+				92E701D73053E46400F7D8D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -461,6 +659,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		767B0AEE5E762B4336932D85 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 928C8B38303F28F8008E68EA /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
 		928C8B3C303F29DB008E68EA /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 928C8B38303F28F8008E68EA /* XCRemoteSwiftPackageReference "supabase-swift" */;

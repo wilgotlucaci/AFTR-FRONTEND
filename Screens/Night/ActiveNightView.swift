@@ -2,25 +2,12 @@ import SwiftUI
 import CoreLocation
 
 struct ActiveNightView: View {
-    let nightId: String
-    let nightTitle: String
+    @ObservedObject var session: NightSession
 
-    @Binding var activeNightId: String
-
-    @State private var isEndingNight = false
-    @State private var status = ""
-    @State private var startedAt = Date()
+    @Environment(\.dismiss) private var dismiss
 
     @State private var joinCode = ""
     @State private var participantCount = 1
-
-    @AppStorage("autoEndAtHome") private var autoEndAtHome = true
-    @AppStorage("getHomeSafeEnabled") private var getHomeSafeEnabled = false
-    @State private var home: HomeLocation?
-    @State private var nearHomeSince: Date?
-    @State private var showSafeWalk = false
-
-    @StateObject private var locationManager = LocationManager()
 
     private let apiService = APIService()
 
@@ -55,17 +42,7 @@ struct ActiveNightView: View {
             .padding(.top, 14)
             .padding(.bottom, 26)
         }
-        .onAppear {
-            startedAt = Date()
-
-            if !locationManager.isTracking {
-                locationManager.startTracking(
-                    nightId: nightId
-                )
-            }
-        }
         .task {
-            home = try? await apiService.getHome()
             while !Task.isCancelled {
                 await refreshDetail()
 
@@ -74,51 +51,22 @@ struct ActiveNightView: View {
                 )
             }
         }
-        .onChange(of: locationManager.lastLocation?.timestamp) { _, _ in
-            checkAutoEnd(locationManager.lastLocation)
-        }
-        .fullScreenCover(isPresented: $showSafeWalk) {
-            if let home {
-                SafeWalkView(home: home) {
-                    showSafeWalk = false
-                    activeNightId = ""
-                }
+        // If the Night ends (manually, or automatically once home) while
+        // this detail screen happens to be open, drop back to Home.
+        .onChange(of: session.isActive) { _, isActive in
+            if !isActive {
+                dismiss()
             }
-        }
-    }
-
-    private func checkAutoEnd(_ location: CLLocation?) {
-        guard autoEndAtHome,
-              !isEndingNight,
-              !showSafeWalk,
-              let location,
-              let home
-        else {
-            nearHomeSince = nil
-            return
-        }
-
-        let atHome = location.distance(from: home.location)
-            <= home.radius_meters
-
-        guard atHome else {
-            nearHomeSince = nil
-            return
-        }
-
-        if nearHomeSince == nil {
-            nearHomeSince = Date()
-        } else if Date().timeIntervalSince(nearHomeSince ?? Date()) >= 90 {
-            status = String(localized: "You're home — wrapping up the Night.")
-            endNight()
         }
     }
 
     @MainActor
     private func refreshDetail() async {
-        guard let detail = try? await apiService.getNight(
-            nightId: nightId
-        ) else {
+        guard let nightId = session.nightId,
+              let detail = try? await apiService.getNight(
+                nightId: nightId
+              )
+        else {
             return
         }
 
@@ -158,6 +106,19 @@ struct ActiveNightView: View {
 
     private var header: some View {
         HStack {
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "chevron.down")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(width: 38, height: 38)
+                    .background(Color.white.opacity(0.08))
+                    .clipShape(Circle())
+            }
+
+            Spacer()
+
             HStack(spacing: 10) {
                 aftrLogo
 
@@ -177,7 +138,7 @@ struct ActiveNightView: View {
             HStack(spacing: 7) {
                 Circle()
                     .fill(
-                        locationManager.isTracking
+                        session.locationManager.isTracking
                             ? Color.green
                             : Color.orange
                     )
@@ -187,7 +148,7 @@ struct ActiveNightView: View {
                     )
 
                 Group {
-                    if locationManager.isTracking {
+                    if session.locationManager.isTracking {
                         Text("LIVE")
                     } else {
                         Text("WAITING")
@@ -200,6 +161,7 @@ struct ActiveNightView: View {
                     Color.white.opacity(0.55)
                 )
             }
+            .frame(width: 38, alignment: .trailing)
         }
     }
 
@@ -303,7 +265,7 @@ struct ActiveNightView: View {
                         neonPink.opacity(0.9)
                     )
 
-                Text(nightTitle)
+                Text(session.nightTitle)
                     .font(
                         .system(
                             size: 36,
@@ -322,7 +284,7 @@ struct ActiveNightView: View {
                 ) { context in
                     Text(
                         formattedDuration(
-                            from: startedAt,
+                            from: session.startedAt,
                             to: context.date
                         )
                     )
@@ -361,8 +323,8 @@ struct ActiveNightView: View {
                 .padding(.horizontal, 20)
             }
 
-            if !status.isEmpty {
-                Text(status)
+            if !session.lastStatus.isEmpty {
+                Text(session.lastStatus)
                     .font(.caption)
                     .foregroundStyle(
                         Color.white.opacity(0.45)
@@ -372,8 +334,8 @@ struct ActiveNightView: View {
 
             // Only surface a permanent, actionable location problem -
             // transient CoreLocation errors are noise on this screen.
-            if locationManager.authorizationStatus == .denied
-                || locationManager.authorizationStatus == .restricted {
+            if session.locationManager.authorizationStatus == .denied
+                || session.locationManager.authorizationStatus == .restricted {
                 Text(
                     "Location is off for AFTR. Turn it on in Settings so we can build your recap."
                 )
@@ -390,7 +352,7 @@ struct ActiveNightView: View {
             ZStack {
                 Circle()
                     .fill(
-                        locationManager.isTracking
+                        session.locationManager.isTracking
                             ? Color.green.opacity(0.12)
                             : Color.orange.opacity(0.12)
                     )
@@ -401,12 +363,12 @@ struct ActiveNightView: View {
 
                 Image(
                     systemName:
-                        locationManager.isTracking
+                        session.locationManager.isTracking
                         ? "location.fill"
                         : "location.slash"
                 )
                 .foregroundStyle(
-                    locationManager.isTracking
+                    session.locationManager.isTracking
                         ? .green
                         : .orange
                 )
@@ -417,7 +379,7 @@ struct ActiveNightView: View {
                 spacing: 4
             ) {
                 Group {
-                    if locationManager.isTracking {
+                    if session.locationManager.isTracking {
                         Text("AFTR is tracking your night")
                     } else {
                         Text("Waiting for location permission")
@@ -428,7 +390,7 @@ struct ActiveNightView: View {
                 .foregroundStyle(.white)
 
                 Group {
-                    if locationManager.isTracking {
+                    if session.locationManager.isTracking {
                         Text("You can leave the app in the background.")
                     } else {
                         Text("Location access is needed for your recap.")
@@ -535,16 +497,16 @@ struct ActiveNightView: View {
 
     private var endNightButton: some View {
         Button {
-            endNight()
+            session.endManually()
         } label: {
             HStack(spacing: 10) {
-                if isEndingNight {
+                if session.isEndingNight {
                     ProgressView()
                         .tint(.black)
                 }
 
                 Group {
-                    if isEndingNight {
+                    if session.isEndingNight {
                         Text("Ending Night...")
                     } else {
                         Text("End Night")
@@ -557,7 +519,7 @@ struct ActiveNightView: View {
                     )
                 )
 
-                if !isEndingNight {
+                if !session.isEndingNight {
                     Image(
                         systemName: "stop.fill"
                     )
@@ -587,7 +549,7 @@ struct ActiveNightView: View {
                 radius: 12
             )
         }
-        .disabled(isEndingNight)
+        .disabled(session.isEndingNight)
     }
 
     private func formattedDuration(
@@ -622,59 +584,8 @@ struct ActiveNightView: View {
             remainingSeconds
         )
     }
-
-    private func endNight() {
-        guard !isEndingNight else {
-            return
-        }
-
-        isEndingNight = true
-        status = String(localized: "Finishing your recap...")
-
-        locationManager.stopTracking()
-
-        Task {
-            do {
-                try await apiService.endNight(
-                    nightId: nightId
-                )
-
-                await MainActor.run {
-                    isEndingNight = false
-                    status = String(localized: "Recap generated")
-
-                    let awayFromHome: Bool = {
-                        guard let home,
-                              let loc = locationManager.lastLocation
-                        else { return true }
-                        return loc.distance(from: home.location)
-                            > home.radius_meters
-                    }()
-
-                    if getHomeSafeEnabled, home != nil, awayFromHome {
-                        showSafeWalk = true
-                    } else {
-                        activeNightId = ""
-                    }
-                }
-
-            } catch {
-                await MainActor.run {
-                    isEndingNight = false
-                    status = String(localized: "Could not end Night:")
-                        + " \(error.localizedDescription)"
-                }
-            }
-        }
-    }
 }
 
 #Preview {
-    ActiveNightView(
-        nightId: "test-night-id",
-        nightTitle: "Friday Night",
-        activeNightId: .constant(
-            "test-night-id"
-        )
-    )
+    ActiveNightView(session: NightSession())
 }

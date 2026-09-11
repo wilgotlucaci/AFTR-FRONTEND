@@ -14,9 +14,9 @@ struct HomeView: View {
 
     @State private var showWrap = false
     @State private var showSettings = false
+    @State private var showActiveNight = false
 
-    @Binding var activeNightId: String
-    @Binding var activeNightTitle: String
+    @EnvironmentObject private var session: NightSession
     @Binding var isLoggedIn: Bool
 
     private let apiService = APIService()
@@ -92,6 +92,11 @@ struct HomeView: View {
                 .overlay(alignment: .top) { statusBarScrim }
             }
         }
+        .safeAreaInset(edge: .top) {
+            if session.isActive {
+                activeNightBanner
+            }
+        }
         .task {
             await loadNights()
         }
@@ -101,6 +106,72 @@ struct HomeView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView(isLoggedIn: $isLoggedIn)
         }
+        .fullScreenCover(isPresented: $showActiveNight) {
+            ActiveNightView(session: session)
+        }
+    }
+
+    private var activeNightBanner: some View {
+        Button {
+            showActiveNight = true
+        } label: {
+            HStack(spacing: 10) {
+                Circle()
+                    .fill(Color.green)
+                    .frame(width: 7, height: 7)
+
+                Text("NIGHT ACTIVE")
+                    .font(.caption2)
+                    .fontWeight(.semibold)
+                    .tracking(1.2)
+
+                Text("·")
+                    .foregroundStyle(Color.white.opacity(0.4))
+
+                Text(session.nightTitle)
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .lineLimit(1)
+
+                Spacer()
+
+                TimelineView(.periodic(from: .now, by: 1)) { context in
+                    Text(elapsed(session.startedAt, context.date))
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(Color.white.opacity(0.6))
+                }
+
+                Image(systemName: "chevron.right")
+                    .font(.caption2)
+                    .foregroundStyle(Color.white.opacity(0.4))
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 11)
+            .background(
+                LinearGradient(
+                    colors: [
+                        neonPink.opacity(0.85),
+                        neonPink.opacity(0.55)
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func elapsed(_ start: Date, _ now: Date) -> String {
+        let seconds = max(0, Int(now.timeIntervalSince(start)))
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        let remainingSeconds = seconds % 60
+
+        if hours > 0 {
+            return String(format: "%02d:%02d:%02d", hours, minutes, remainingSeconds)
+        }
+        return String(format: "%02d:%02d", minutes, remainingSeconds)
     }
 
     private var statusBarScrim: some View {
@@ -804,8 +875,8 @@ struct HomeView: View {
                 )
 
                 await MainActor.run {
-                    activeNightTitle = night.title
-                    activeNightId = night.id
+                    session.start(nightId: night.id, title: night.title)
+                    showActiveNight = true
                     isStartingNight = false
                     status = ""
                 }
@@ -840,8 +911,8 @@ struct HomeView: View {
                 )
 
                 await MainActor.run {
-                    activeNightTitle = night.title
-                    activeNightId = night.id
+                    session.start(nightId: night.id, title: night.title)
+                    showActiveNight = true
                     isJoiningNight = false
                     joinCode = ""
                 }
@@ -861,7 +932,6 @@ struct HomeView: View {
             await authService.signOut()
 
             await MainActor.run {
-                activeNightId = ""
                 isLoggedIn = false
             }
         }
@@ -875,12 +945,26 @@ struct HomeView: View {
             nights =
                 try await apiService.getNights()
 
-            if activeNightId.isEmpty,
+            session.reconcile(
+                activeNightIds: Set(
+                    nights.filter { $0.status == "active" }.map(\.id)
+                )
+            )
+
+            if !session.isActive,
                let ongoing = nights.first(
                    where: { $0.status == "active" }
                ) {
-                activeNightTitle = ongoing.title
-                activeNightId = ongoing.id
+                let formatter = ISO8601DateFormatter()
+                let startedAt = formatter.date(
+                    from: ongoing.started_at
+                ) ?? Date()
+
+                session.resume(
+                    nightId: ongoing.id,
+                    title: ongoing.title,
+                    startedAt: startedAt
+                )
             }
         } catch {
             status = String(localized: "Could not load Nights:")
@@ -892,9 +976,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(
-        activeNightId: .constant(""),
-        activeNightTitle: .constant(""),
-        isLoggedIn: .constant(true)
-    )
+    HomeView(isLoggedIn: .constant(true))
+        .environmentObject(NightSession())
 }
