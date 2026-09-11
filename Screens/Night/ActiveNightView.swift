@@ -109,7 +109,7 @@ struct ActiveNightView: View {
         if nearHomeSince == nil {
             nearHomeSince = Date()
         } else if Date().timeIntervalSince(nearHomeSince ?? Date()) >= 90 {
-            status = "You're home — wrapping up the Night."
+            status = String(localized: "You're home — wrapping up the Night.")
             endNight()
         }
     }
@@ -186,11 +186,13 @@ struct ActiveNightView: View {
                         height: 7
                     )
 
-                Text(
-                    locationManager.isTracking
-                        ? "LIVE"
-                        : "WAITING"
-                )
+                Group {
+                    if locationManager.isTracking {
+                        Text("LIVE")
+                    } else {
+                        Text("WAITING")
+                    }
+                }
                 .font(.caption2)
                 .fontWeight(.semibold)
                 .tracking(1.1)
@@ -414,20 +416,24 @@ struct ActiveNightView: View {
                 alignment: .leading,
                 spacing: 4
             ) {
-                Text(
-                    locationManager.isTracking
-                        ? "AFTR is tracking your night"
-                        : "Waiting for location permission"
-                )
+                Group {
+                    if locationManager.isTracking {
+                        Text("AFTR is tracking your night")
+                    } else {
+                        Text("Waiting for location permission")
+                    }
+                }
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundStyle(.white)
 
-                Text(
-                    locationManager.isTracking
-                        ? "You can leave the app in the background."
-                        : "Location access is needed for your recap."
-                )
+                Group {
+                    if locationManager.isTracking {
+                        Text("You can leave the app in the background.")
+                    } else {
+                        Text("Location access is needed for your recap.")
+                    }
+                }
                 .font(.caption)
                 .foregroundStyle(
                     Color.white.opacity(0.38)
@@ -498,7 +504,8 @@ struct ActiveNightView: View {
             )
 
             ShareLink(
-                item: "Join my AFTR Night with code \(joinCode)"
+                item: String(localized: "Join my AFTR Night with code")
+                    + " \(joinCode)"
             ) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.system(size: 16, weight: .semibold))
@@ -536,11 +543,13 @@ struct ActiveNightView: View {
                         .tint(.black)
                 }
 
-                Text(
-                    isEndingNight
-                        ? "Ending Night..."
-                        : "End Night"
-                )
+                Group {
+                    if isEndingNight {
+                        Text("Ending Night...")
+                    } else {
+                        Text("End Night")
+                    }
+                }
                 .font(
                     .system(
                         size: 17,
@@ -620,7 +629,7 @@ struct ActiveNightView: View {
         }
 
         isEndingNight = true
-        status = "Finishing your recap..."
+        status = String(localized: "Finishing your recap...")
 
         locationManager.stopTracking()
 
@@ -632,7 +641,7 @@ struct ActiveNightView: View {
 
                 await MainActor.run {
                     isEndingNight = false
-                    status = "Recap generated"
+                    status = String(localized: "Recap generated")
 
                     let awayFromHome: Bool = {
                         guard let home,
@@ -652,8 +661,8 @@ struct ActiveNightView: View {
             } catch {
                 await MainActor.run {
                     isEndingNight = false
-                    status =
-                        "Could not end Night: \(error.localizedDescription)"
+                    status = String(localized: "Could not end Night:")
+                        + " \(error.localizedDescription)"
                 }
             }
         }

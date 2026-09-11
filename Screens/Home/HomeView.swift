@@ -325,11 +325,13 @@ struct HomeView: View {
                             .tint(.black)
                     }
 
-                    Text(
-                        isStartingNight
-                            ? "Starting..."
-                            : "Start Night"
-                    )
+                    Group {
+                        if isStartingNight {
+                            Text("Starting...")
+                        } else {
+                            Text("Start Night")
+                        }
+                    }
                     .font(
                         .system(
                             size: 17,
@@ -626,11 +628,13 @@ struct HomeView: View {
 
                     Text("•")
 
-                    Text(
-                        night.status == "finished"
-                            ? "Recap ready"
-                            : "Active"
-                    )
+                    Group {
+                        if night.status == "finished" {
+                            Text("Recap ready")
+                        } else {
+                            Text("Active")
+                        }
+                    }
                 }
                 .font(.caption)
                 .foregroundStyle(
@@ -671,7 +675,7 @@ struct HomeView: View {
     private func overviewCard(
         icon: String,
         value: String,
-        label: String,
+        label: LocalizedStringKey,
         accent: Color
     ) -> some View {
         VStack(spacing: 8) {
@@ -709,7 +713,7 @@ struct HomeView: View {
     }
 
     private func sectionTitle(
-        _ title: String
+        _ title: LocalizedStringKey
     ) -> some View {
         Text(title)
             .font(.caption2)
@@ -748,7 +752,7 @@ struct HomeView: View {
                 from: dateString
             )
         else {
-            return "Night"
+            return String(localized: "Night")
         }
 
         return date.formatted(
@@ -781,7 +785,7 @@ struct HomeView: View {
 
     private func startNight() {
         guard !nightTitle.isEmpty else {
-            status = "Enter a Night title."
+            status = String(localized: "Enter a Night title.")
             return
         }
 
@@ -822,7 +826,7 @@ struct HomeView: View {
         )
 
         guard code.count >= 6 else {
-            status = "Enter the 6-character join code."
+            status = String(localized: "Enter the 6-character join code.")
             return
         }
 
@@ -844,8 +848,9 @@ struct HomeView: View {
             } catch {
                 await MainActor.run {
                     isJoiningNight = false
-                    status =
-                        "Could not join Night. Check the code."
+                    status = String(
+                        localized: "Could not join Night. Check the code."
+                    )
                 }
             }
         }
@@ -878,8 +883,8 @@ struct HomeView: View {
                 activeNightId = ongoing.id
             }
         } catch {
-            status =
-                "Could not load Nights: \(error.localizedDescription)"
+            status = String(localized: "Could not load Nights:")
+                + " \(error.localizedDescription)"
         }
 
         isLoadingNights = false
