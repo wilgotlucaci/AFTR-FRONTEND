@@ -1,137 +1,460 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "AFTR SAYS": {},
-    "AFTR can't see your library, but you can still pick photos to add.": {},
-    "AFTR is tracking your night": {},
-    "AFTR uses this to end a Night automatically when you get home. It never leaves your account.": {},
-    "AFTR will quietly track the night and build your recap.": {},
-    "Account created. Check your email to confirm, then log in.": {},
-    "Active": {},
-    "Add": {},
-    "Add photos": {},
-    "Already have an account?  ": {},
-    "Apple didn't return a usable token.": {},
-    "At least 6 characters": {},
-    "BEST MOMENTS": {},
-    "Building your AFTR...": {},
-    "Cancel": {},
-    "Clear": {},
-    "Close": {},
-    "Could not end Night:": {},
-    "Could not join Night. Check the code.": {},
-    "Could not load Nights:": {},
-    "Could not load recap": {},
-    "Couldn't get your location. Allow location access and try again.": {},
-    "Couldn't start the link. You can still head home.": {},
-    "Create account": {},
-    "Create an account": {},
-    "Create your AFTR": {},
-    "Creating…": {},
-    "DURING A NIGHT": {},
-    "Done": {},
-    "EMAIL": {},
-    "Email": {},
-    "End Night": {},
-    "End the Night when I get home": {},
-    "Ending Night...": {},
-    "Enter a Night title.": {},
-    "Enter a valid email.": {},
-    "Enter the 6-character join code.": {},
-    "Enter your email.": {},
-    "Enter your name.": {},
-    "Enter your password.": {},
-    "Fast": {},
-    "Finishing your recap...": {},
-    "Get home safe": {},
-    "HOME": {},
-    "Home is set": {},
-    "Home safe": {},
-    "I'm home — stop sharing": {},
-    "INVITE CODE": {},
-    "Join": {},
-    "Join code": {},
-    "Join my AFTR Night with code": {},
-    "LIVE": {},
-    "Latest": {},
-    "Latest you called it": {},
-    "Live tonight.": {},
-    "Location access is needed for your recap.": {},
-    "Location is off for AFTR. Turn it on in Settings so we can build your recap.": {},
-    "Log in": {},
-    "Logged in": {},
-    "Logging in...": {},
-    "Looking through your photos…": {},
-    "MOVEMENT": {},
-    "Make tonight memorable.": {},
-    "Memories": {},
-    "Moving": {},
-    "NAME": {},
-    "NIGHT ACTIVE": {},
-    "New here?  ": {},
-    "Night": {},
-    "Night title": {},
-    "Nights": {},
-    "Nights out": {},
-    "No Nights yet": {},
-    "No nights yet this month": {},
-    "No photos found from around this Night.": {},
-    "Offer “get home safe” after a Night": {},
-    "One account. Every night remembered.": {},
-    "Out and about": {},
-    "PASSWORD": {},
-    "PLACES": {},
-    "Password": {},
-    "Password needs at least 6 characters.": {},
-    "People": {},
-    "Pick other photos": {},
-    "Places": {},
-    "Preparing link…": {},
-    "Pull in the photos you took during this Night.": {},
-    "Put your phone away.": {},
-    "RECAP": {},
-    "RECENT NIGHTS": {},
-    "REMEMBER TOMORROW": {},
-    "Ready for tonight?": {},
-    "Recap generated": {},
-    "Recap ready": {},
-    "Remember tomorrow.": {},
-    "START A NIGHT": {},
-    "Saved.": {},
-    "Set home to my current location": {},
-    "Settings": {},
-    "Share a live link with a friend until you're home.": {},
-    "Share live link": {},
-    "Share the link. AFTR tells whoever has it when you're home, then stops.": {},
-    "Sign out": {},
-    "Skip": {},
-    "Start Night": {},
-    "Start a Night and AFTR will quietly remember the rest.": {},
-    "Start one and it'll show up here.": {},
-    "Starting...": {},
-    "Still": {},
-    "THE NIGHT": {},
-    "THE ROUTE": {},
-    "TOTAL NIGHT": {},
-    "Update": {},
-    "Vehicle": {},
-    "WAITING": {},
-    "Waiting for location permission": {},
-    "Walking": {},
-    "YOUR AFTR": {},
-    "YOUR CREW": {},
-    "YOUR SPOTS": {},
-    "You can leave the app in the background.": {},
-    "You covered": {},
-    "You're home — wrapping up the Night.": {},
-    "Your finished Nights will appear here.": {},
-    "Your friend was told you made it.": {},
-    "Your month in review": {},
-    "Your month out": {},
-    "Your name": {},
-    "Your night": {},
-    "from first moment to last": {},
-    "or": {}
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "·" : {
+
+    },
+    "%lld" : {
+
+    },
+    "%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
+    },
+    "%lld selected" : {
+
+    },
+    "•" : {
+
+    },
+    "Account created. Check your email to confirm, then log in." : {
+
+    },
+    "Active" : {
+
+    },
+    "Add" : {
+
+    },
+    "Add photos" : {
+
+    },
+    "Added %lld %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Added %1$lld %2$@."
+          }
+        }
+      }
+    },
+    "Added %lld, %lld failed." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Added %1$lld, %2$lld failed."
+          }
+        }
+      }
+    },
+    "Adding %lld of %lld…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Adding %1$lld of %2$lld…"
+          }
+        }
+      }
+    },
+    "AFTR" : {
+
+    },
+    "AFTR can't see your library, but you can still pick photos to add." : {
+
+    },
+    "AFTR is tracking your night" : {
+
+    },
+    "AFTR SAYS" : {
+
+    },
+    "AFTR uses this to end a Night automatically when you get home. It never leaves your account." : {
+
+    },
+    "AFTR will quietly track the night and build your recap." : {
+
+    },
+    "Already have an account?  " : {
+
+    },
+    "Apple didn't return a usable token." : {
+
+    },
+    "At least 6 characters" : {
+
+    },
+    "BEST MOMENTS" : {
+
+    },
+    "Building your AFTR..." : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Clear" : {
+
+    },
+    "Close" : {
+
+    },
+    "Could not end Night:" : {
+
+    },
+    "Could not join Night. Check the code." : {
+
+    },
+    "Could not load Nights:" : {
+
+    },
+    "Could not load recap" : {
+
+    },
+    "Couldn't get your location. Allow location access and try again." : {
+
+    },
+    "Couldn't start the link. You can still head home." : {
+
+    },
+    "Create account" : {
+
+    },
+    "Create an account" : {
+
+    },
+    "Create your AFTR" : {
+
+    },
+    "Creating…" : {
+
+    },
+    "Done" : {
+
+    },
+    "DURING A NIGHT" : {
+
+    },
+    "Email" : {
+
+    },
+    "EMAIL" : {
+
+    },
+    "End Night" : {
+
+    },
+    "End the Night when I get home" : {
+
+    },
+    "Ending Night..." : {
+
+    },
+    "Enter a Night title." : {
+
+    },
+    "Enter a valid email." : {
+
+    },
+    "Enter the 6-character join code." : {
+
+    },
+    "Enter your email." : {
+
+    },
+    "Enter your name." : {
+
+    },
+    "Enter your password." : {
+
+    },
+    "Fast" : {
+
+    },
+    "Finishing your recap..." : {
+
+    },
+    "from first moment to last" : {
+
+    },
+    "Get home safe" : {
+
+    },
+    "HOME" : {
+
+    },
+    "Home is set" : {
+
+    },
+    "Home safe" : {
+
+    },
+    "I'm home — stop sharing" : {
+
+    },
+    "INVITE CODE" : {
+
+    },
+    "Join" : {
+
+    },
+    "Join code" : {
+
+    },
+    "Join my AFTR Night with code" : {
+
+    },
+    "Latest" : {
+
+    },
+    "Latest you called it" : {
+
+    },
+    "LIVE" : {
+
+    },
+    "Live tonight." : {
+
+    },
+    "Location access is needed for your recap." : {
+
+    },
+    "Location is off for AFTR. Turn it on in Settings so we can build your recap." : {
+
+    },
+    "Log in" : {
+
+    },
+    "Logged in" : {
+
+    },
+    "Logging in..." : {
+
+    },
+    "Looking through your photos…" : {
+
+    },
+    "Make tonight memorable." : {
+
+    },
+    "Memories" : {
+
+    },
+    "MOVEMENT" : {
+
+    },
+    "Moving" : {
+
+    },
+    "NAME" : {
+
+    },
+    "New here?  " : {
+
+    },
+    "Night" : {
+
+    },
+    "NIGHT ACTIVE" : {
+
+    },
+    "Night title" : {
+
+    },
+    "Nights" : {
+
+    },
+    "Nights out" : {
+
+    },
+    "No Nights yet" : {
+
+    },
+    "No nights yet this month" : {
+
+    },
+    "No photos found from around this Night." : {
+
+    },
+    "Offer “get home safe” after a Night" : {
+
+    },
+    "One account. Every night remembered." : {
+
+    },
+    "or" : {
+
+    },
+    "Out and about" : {
+
+    },
+    "Password" : {
+
+    },
+    "PASSWORD" : {
+
+    },
+    "Password needs at least 6 characters." : {
+
+    },
+    "People" : {
+
+    },
+    "Pick other photos" : {
+
+    },
+    "Places" : {
+
+    },
+    "PLACES" : {
+
+    },
+    "Places · %lld stops" : {
+
+    },
+    "Preparing link…" : {
+
+    },
+    "Pull in the photos you took during this Night." : {
+
+    },
+    "Put your phone away." : {
+
+    },
+    "Ready for tonight?" : {
+
+    },
+    "RECAP" : {
+
+    },
+    "Recap generated" : {
+
+    },
+    "Recap ready" : {
+
+    },
+    "RECENT NIGHTS" : {
+
+    },
+    "REMEMBER TOMORROW" : {
+
+    },
+    "Remember tomorrow." : {
+
+    },
+    "Saved." : {
+
+    },
+    "Set home to my current location" : {
+
+    },
+    "Settings" : {
+
+    },
+    "Share a live link with a friend until you're home." : {
+
+    },
+    "Share live link" : {
+
+    },
+    "Share the link. AFTR tells whoever has it when you're home, then stops." : {
+
+    },
+    "Sign out" : {
+
+    },
+    "Skip" : {
+
+    },
+    "START A NIGHT" : {
+
+    },
+    "Start a Night and AFTR will quietly remember the rest." : {
+
+    },
+    "Start Night" : {
+
+    },
+    "Start one and it'll show up here." : {
+
+    },
+    "Starting..." : {
+
+    },
+    "Still" : {
+
+    },
+    "THE NIGHT" : {
+
+    },
+    "THE ROUTE" : {
+
+    },
+    "TOTAL NIGHT" : {
+
+    },
+    "Update" : {
+
+    },
+    "Vehicle" : {
+
+    },
+    "WAITING" : {
+
+    },
+    "Waiting for location permission" : {
+
+    },
+    "Walking" : {
+
+    },
+    "You can leave the app in the background." : {
+
+    },
+    "You covered" : {
+
+    },
+    "You're home — wrapping up the Night." : {
+
+    },
+    "YOUR AFTR" : {
+
+    },
+    "YOUR CREW" : {
+
+    },
+    "Your finished Nights will appear here." : {
+
+    },
+    "Your friend was told you made it." : {
+
+    },
+    "Your month in review" : {
+
+    },
+    "Your month out" : {
+
+    },
+    "Your name" : {
+
+    },
+    "Your night" : {
+
+    },
+    "YOUR SPOTS" : {
+
+    }
   },
-  "version": "1.2"
+  "version" : "1.2"
 }
