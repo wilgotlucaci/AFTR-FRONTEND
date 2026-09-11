@@ -1,7 +1,1316 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-
+  "sourceLanguage": "en",
+  "strings": {
+    "AFTR SAYS": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AFTR SÄGER"
+          }
+        }
+      }
+    },
+    "AFTR can't see your library, but you can still pick photos to add.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AFTR kan inte se ditt bildbibliotek, men du kan ändå välja bilder att lägga till."
+          }
+        }
+      }
+    },
+    "AFTR is tracking your night": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AFTR spårar din kväll"
+          }
+        }
+      }
+    },
+    "AFTR uses this to end a Night automatically when you get home. It never leaves your account.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AFTR använder detta för att avsluta en Night automatiskt när du kommer hem. Det lämnar aldrig ditt konto."
+          }
+        }
+      }
+    },
+    "AFTR will quietly track the night and build your recap.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AFTR spårar kvällen tyst och bygger din recap."
+          }
+        }
+      }
+    },
+    "Account created. Check your email to confirm, then log in.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kontot är skapat. Kolla din mejl för att bekräfta, logga sedan in."
+          }
+        }
+      }
+    },
+    "Active": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv"
+          }
+        }
+      }
+    },
+    "Add": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lägg till"
+          }
+        }
+      }
+    },
+    "Add photos": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lägg till bilder"
+          }
+        }
+      }
+    },
+    "Already have an account?  ": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Har du redan ett konto?  "
+          }
+        }
+      }
+    },
+    "Apple didn't return a usable token.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple returnerade ingen giltig token."
+          }
+        }
+      }
+    },
+    "At least 6 characters": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minst 6 tecken"
+          }
+        }
+      }
+    },
+    "BEST MOMENTS": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BÄSTA ÖGONBLICKEN"
+          }
+        }
+      }
+    },
+    "Building your AFTR...": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bygger ditt AFTR …"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avbryt"
+          }
+        }
+      }
+    },
+    "Clear": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta bort"
+          }
+        }
+      }
+    },
+    "Close": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stäng"
+          }
+        }
+      }
+    },
+    "Could not end Night:": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunde inte avsluta Night:"
+          }
+        }
+      }
+    },
+    "Could not join Night. Check the code.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunde inte gå med i Night. Kontrollera koden."
+          }
+        }
+      }
+    },
+    "Could not load Nights:": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunde inte läsa in Nights:"
+          }
+        }
+      }
+    },
+    "Could not load recap": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunde inte läsa in recap"
+          }
+        }
+      }
+    },
+    "Couldn't get your location. Allow location access and try again.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunde inte hämta din plats. Tillåt platsåtkomst och försök igen."
+          }
+        }
+      }
+    },
+    "Couldn't start the link. You can still head home.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunde inte starta länken. Du kan fortfarande ge dig hemåt."
+          }
+        }
+      }
+    },
+    "Create account": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skapa konto"
+          }
+        }
+      }
+    },
+    "Create an account": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skapa ett konto"
+          }
+        }
+      }
+    },
+    "Create your AFTR": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skapa ditt AFTR"
+          }
+        }
+      }
+    },
+    "Creating…": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skapar …"
+          }
+        }
+      }
+    },
+    "DURING A NIGHT": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UNDER EN NIGHT"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klart"
+          }
+        }
+      }
+    },
+    "EMAIL": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E-POST"
+          }
+        }
+      }
+    },
+    "Email": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E-post"
+          }
+        }
+      }
+    },
+    "End Night": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avsluta Night"
+          }
+        }
+      }
+    },
+    "End the Night when I get home": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avsluta Night när jag kommer hem"
+          }
+        }
+      }
+    },
+    "Ending Night...": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avslutar Night …"
+          }
+        }
+      }
+    },
+    "Enter a Night title.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ange en titel för kvällen."
+          }
+        }
+      }
+    },
+    "Enter a valid email.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ange en giltig e-postadress."
+          }
+        }
+      }
+    },
+    "Enter the 6-character join code.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ange den 6-teckniga anslutningskoden."
+          }
+        }
+      }
+    },
+    "Enter your email.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ange din e-postadress."
+          }
+        }
+      }
+    },
+    "Enter your name.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ange ditt namn."
+          }
+        }
+      }
+    },
+    "Enter your password.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ange ditt lösenord."
+          }
+        }
+      }
+    },
+    "Fast": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snabb"
+          }
+        }
+      }
+    },
+    "Finishing your recap...": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skapar din recap …"
+          }
+        }
+      }
+    },
+    "Get home safe": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kom hem säkert"
+          }
+        }
+      }
+    },
+    "HOME": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEM"
+          }
+        }
+      }
+    },
+    "Home is set": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hemmet är sparat"
+          }
+        }
+      }
+    },
+    "Home safe": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hemma säkert"
+          }
+        }
+      }
+    },
+    "I'm home — stop sharing": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jag är hemma — sluta dela"
+          }
+        }
+      }
+    },
+    "INVITE CODE": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ANSLUTNINGSKOD"
+          }
+        }
+      }
+    },
+    "Join": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gå med"
+          }
+        }
+      }
+    },
+    "Join code": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anslutningskod"
+          }
+        }
+      }
+    },
+    "Join my AFTR Night with code": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gå med i min AFTR Night med koden"
+          }
+        }
+      }
+    },
+    "LIVE": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LIVE"
+          }
+        }
+      }
+    },
+    "Latest": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senaste"
+          }
+        }
+      }
+    },
+    "Latest you called it": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senast du avslutade"
+          }
+        }
+      }
+    },
+    "Live tonight.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live ikväll."
+          }
+        }
+      }
+    },
+    "Location access is needed for your recap.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Platsåtkomst behövs för din recap."
+          }
+        }
+      }
+    },
+    "Location is off for AFTR. Turn it on in Settings so we can build your recap.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Platstjänster är av för AFTR. Slå på dem i Inställningar så vi kan bygga din recap."
+          }
+        }
+      }
+    },
+    "Log in": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logga in"
+          }
+        }
+      }
+    },
+    "Logged in": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inloggad"
+          }
+        }
+      }
+    },
+    "Logging in...": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loggar in …"
+          }
+        }
+      }
+    },
+    "Looking through your photos…": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Letar igenom dina bilder …"
+          }
+        }
+      }
+    },
+    "MOVEMENT": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RÖRELSE"
+          }
+        }
+      }
+    },
+    "Make tonight memorable.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gör ikväll minnesvärd."
+          }
+        }
+      }
+    },
+    "Memories": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minnen"
+          }
+        }
+      }
+    },
+    "Moving": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I rörelse"
+          }
+        }
+      }
+    },
+    "NAME": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NAMN"
+          }
+        }
+      }
+    },
+    "NIGHT ACTIVE": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NIGHT AKTIV"
+          }
+        }
+      }
+    },
+    "New here?  ": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ny här?  "
+          }
+        }
+      }
+    },
+    "Night": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night"
+          }
+        }
+      }
+    },
+    "Night title": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kvällens titel"
+          }
+        }
+      }
+    },
+    "Nights": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nights"
+          }
+        }
+      }
+    },
+    "Nights out": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nätter ute"
+          }
+        }
+      }
+    },
+    "No Nights yet": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inga Nights än"
+          }
+        }
+      }
+    },
+    "No nights yet this month": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inga kvällar än den här månaden"
+          }
+        }
+      }
+    },
+    "No photos found from around this Night.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inga bilder hittades från den här kvällen."
+          }
+        }
+      }
+    },
+    "Offer “get home safe” after a Night": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erbjud ”kom hem säkert” efter en Night"
+          }
+        }
+      }
+    },
+    "One account. Every night remembered.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ett konto. Varje kväll ihågkommen."
+          }
+        }
+      }
+    },
+    "Out and about": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ute och rörde dig"
+          }
+        }
+      }
+    },
+    "PASSWORD": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LÖSENORD"
+          }
+        }
+      }
+    },
+    "PLACES": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PLATSER"
+          }
+        }
+      }
+    },
+    "Password": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lösenord"
+          }
+        }
+      }
+    },
+    "Password needs at least 6 characters.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lösenordet måste vara minst 6 tecken."
+          }
+        }
+      }
+    },
+    "People": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personer"
+          }
+        }
+      }
+    },
+    "Pick other photos": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Välj andra bilder"
+          }
+        }
+      }
+    },
+    "Places": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Platser"
+          }
+        }
+      }
+    },
+    "Preparing link…": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Förbereder länk …"
+          }
+        }
+      }
+    },
+    "Pull in the photos you took during this Night.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hämta in bilderna du tog under kvällen."
+          }
+        }
+      }
+    },
+    "Put your phone away.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lägg undan telefonen."
+          }
+        }
+      }
+    },
+    "RECAP": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RECAP"
+          }
+        }
+      }
+    },
+    "RECENT NIGHTS": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SENASTE NIGHTS"
+          }
+        }
+      }
+    },
+    "REMEMBER TOMORROW": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MINNS IMORGON"
+          }
+        }
+      }
+    },
+    "Ready for tonight?": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redo för ikväll?"
+          }
+        }
+      }
+    },
+    "Recap generated": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recap klar"
+          }
+        }
+      }
+    },
+    "Recap ready": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recap klar"
+          }
+        }
+      }
+    },
+    "Remember tomorrow.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minns imorgon."
+          }
+        }
+      }
+    },
+    "START A NIGHT": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "STARTA EN NIGHT"
+          }
+        }
+      }
+    },
+    "Saved.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sparat."
+          }
+        }
+      }
+    },
+    "Set home to my current location": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ange hem till min nuvarande plats"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inställningar"
+          }
+        }
+      }
+    },
+    "Share a live link with a friend until you're home.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dela en live-länk med en vän tills du är hemma."
+          }
+        }
+      }
+    },
+    "Share live link": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dela live-länk"
+          }
+        }
+      }
+    },
+    "Share the link. AFTR tells whoever has it when you're home, then stops.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dela länken. AFTR meddelar den som har den när du är hemma, och stoppar sedan."
+          }
+        }
+      }
+    },
+    "Sign out": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logga ut"
+          }
+        }
+      }
+    },
+    "Skip": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoppa över"
+          }
+        }
+      }
+    },
+    "Start Night": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starta Night"
+          }
+        }
+      }
+    },
+    "Start a Night and AFTR will quietly remember the rest.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starta en Night så minns AFTR resten åt dig, tyst i bakgrunden."
+          }
+        }
+      }
+    },
+    "Start one and it'll show up here.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starta en så dyker den upp här."
+          }
+        }
+      }
+    },
+    "Starting...": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Startar …"
+          }
+        }
+      }
+    },
+    "Still": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stillastående"
+          }
+        }
+      }
+    },
+    "THE NIGHT": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KVÄLLEN"
+          }
+        }
+      }
+    },
+    "THE ROUTE": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RUTTEN"
+          }
+        }
+      }
+    },
+    "TOTAL NIGHT": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HELA KVÄLLEN"
+          }
+        }
+      }
+    },
+    "Update": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uppdatera"
+          }
+        }
+      }
+    },
+    "Vehicle": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fordon"
+          }
+        }
+      }
+    },
+    "WAITING": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VÄNTAR"
+          }
+        }
+      }
+    },
+    "Waiting for location permission": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Väntar på platsbehörighet"
+          }
+        }
+      }
+    },
+    "Walking": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Promenad"
+          }
+        }
+      }
+    },
+    "YOUR AFTR": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DITT AFTR"
+          }
+        }
+      }
+    },
+    "YOUR CREW": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DITT GÄNG"
+          }
+        }
+      }
+    },
+    "YOUR SPOTS": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DINA STÄLLEN"
+          }
+        }
+      }
+    },
+    "You can leave the app in the background.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kan lämna appen i bakgrunden."
+          }
+        }
+      }
+    },
+    "You covered": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du tog dig"
+          }
+        }
+      }
+    },
+    "You're home — wrapping up the Night.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du är hemma — avslutar Night."
+          }
+        }
+      }
+    },
+    "Your finished Nights will appear here.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dina avslutade Nights dyker upp här."
+          }
+        }
+      }
+    },
+    "Your friend was told you made it.": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din vän fick veta att du kom hem."
+          }
+        }
+      }
+    },
+    "Your month in review": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din månad i sammandrag"
+          }
+        }
+      }
+    },
+    "Your month out": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din månad ute"
+          }
+        }
+      }
+    },
+    "Your name": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ditt namn"
+          }
+        }
+      }
+    },
+    "Your night": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din kväll"
+          }
+        }
+      }
+    },
+    "from first moment to last": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "från första till sista stund"
+          }
+        }
+      }
+    },
+    "or": {
+      "localizations": {
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "eller"
+          }
+        }
+      }
+    }
   },
-  "version" : "1.2"
+  "version": "1.2"
 }
