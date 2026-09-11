@@ -62,11 +62,12 @@ struct AddPhotosView: View {
                     spinner: true
                 )
             case .done:
-                message(
-                    failed == 0
-                        ? "Added \(uploaded) photo\(uploaded == 1 ? "" : "s")."
-                        : "Added \(uploaded), \(failed) failed."
-                )
+                let photoWord = uploaded == 1 ? "photo" : "photos"
+                if failed == 0 {
+                    message("Added \(uploaded) \(photoWord).")
+                } else {
+                    message("Added \(uploaded), \(failed) failed.")
+                }
             case .review:
                 reviewGrid
             }
@@ -215,7 +216,7 @@ struct AddPhotosView: View {
     }
 
     private func message(
-        _ text: String,
+        _ text: LocalizedStringKey,
         spinner: Bool = false
     ) -> some View {
         VStack(spacing: 14) {

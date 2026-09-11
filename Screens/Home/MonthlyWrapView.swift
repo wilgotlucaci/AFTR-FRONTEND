@@ -103,7 +103,7 @@ struct MonthlyWrapView: View {
     }
 
     private func bigStat(
-        _ value: String, _ label: String, _ icon: String
+        _ value: String, _ label: LocalizedStringKey, _ icon: String
     ) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Image(systemName: icon).foregroundStyle(neonPink)
@@ -122,7 +122,7 @@ struct MonthlyWrapView: View {
     }
 
     private func lineStat(
-        _ label: String, _ value: String, _ icon: String
+        _ label: LocalizedStringKey, _ value: String, _ icon: String
     ) -> some View {
         HStack(spacing: 12) {
             Image(systemName: icon).foregroundStyle(neonPink)
@@ -138,7 +138,7 @@ struct MonthlyWrapView: View {
     }
 
     private func listSection(
-        _ title: String, _ rows: [WrapCount], unit: String
+        _ title: LocalizedStringKey, _ rows: [WrapCount], unit: String
     ) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)

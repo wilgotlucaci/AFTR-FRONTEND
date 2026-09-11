@@ -122,7 +122,7 @@ struct SettingsView: View {
     }
 
     private func section<Content: View>(
-        _ title: String,
+        _ title: LocalizedStringKey,
         @ViewBuilder _ content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -138,7 +138,7 @@ struct SettingsView: View {
     }
 
     private func pillButton(
-        _ title: String,
+        _ title: LocalizedStringKey,
         filled: Bool,
         destructive: Bool = false,
         action: @escaping () -> Void
@@ -177,12 +177,14 @@ struct SettingsView: View {
                 await MainActor.run {
                     home = saved
                     isBusy = false
-                    status = "Saved."
+                    status = String(localized: "Saved.")
                 }
             } catch {
                 await MainActor.run {
                     isBusy = false
-                    status = "Couldn't get your location. Allow location access and try again."
+                    status = String(
+                        localized: "Couldn't get your location. Allow location access and try again."
+                    )
                 }
             }
         }

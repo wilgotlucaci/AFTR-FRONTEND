@@ -55,7 +55,9 @@ struct AppleSignInButton: View {
                 let tokenData = credential.identityToken,
                 let idToken = String(data: tokenData, encoding: .utf8)
             else {
-                errorText = "Apple didn't return a usable token."
+                errorText = String(
+                    localized: "Apple didn't return a usable token."
+                )
                 return
             }
 

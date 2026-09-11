@@ -31,14 +31,23 @@ struct SafeWalkView: View {
                     .shadow(color: (arrived ? .green : neonPink).opacity(0.6), radius: 14)
 
                 VStack(spacing: 8) {
-                    Text(arrived ? "Home safe" : "Get home safe")
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-                    Text(
-                        arrived
-                            ? "Your friend was told you made it."
-                            : "Share the link. AFTR tells whoever has it when you're home, then stops."
-                    )
+                    Group {
+                        if arrived {
+                            Text("Home safe")
+                        } else {
+                            Text("Get home safe")
+                        }
+                    }
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+
+                    Group {
+                        if arrived {
+                            Text("Your friend was told you made it.")
+                        } else {
+                            Text("Share the link. AFTR tells whoever has it when you're home, then stops.")
+                        }
+                    }
                     .font(.subheadline)
                     .foregroundStyle(Color.white.opacity(0.5))
                     .multilineTextAlignment(.center)
@@ -104,7 +113,9 @@ struct SafeWalkView: View {
             tracker.start()
         } catch {
             await MainActor.run {
-                errorText = "Couldn't start the link. You can still head home."
+                errorText = String(
+                    localized: "Couldn't start the link. You can still head home."
+                )
             }
         }
     }
@@ -147,12 +158,12 @@ struct SafeWalkView: View {
     // MARK: - UI bits
 
     private func filledButton(
-        _ title: String, action: @escaping () -> Void
+        _ title: LocalizedStringKey, action: @escaping () -> Void
     ) -> some View {
         Button(action: action) { filledLabel(title, icon: nil) }
     }
 
-    private func filledLabel(_ title: String, icon: String?) -> some View {
+    private func filledLabel(_ title: LocalizedStringKey, icon: String?) -> some View {
         HStack(spacing: 8) {
             if let icon { Image(systemName: icon) }
             Text(title).font(.system(size: 17, weight: .semibold))
