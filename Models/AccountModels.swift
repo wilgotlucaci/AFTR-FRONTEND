@@ -29,7 +29,9 @@ struct MonthlyWrap: Decodable {
     let unique_venues: Int
     let top_venues: [WrapCount]
     let top_people: [WrapCount]
-    let busiest_weekday: String?
+    /// Monday = 0 ... Sunday = 6. Language-agnostic - localized to a
+    /// weekday name on-device via Foundation's Calendar.
+    let busiest_weekday_index: Int?
     let latest_end_hour: Double?
 }
 

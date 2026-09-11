@@ -65,8 +65,8 @@ struct MonthlyWrapView: View {
                     )
                 }
 
-                if let day = wrap.busiest_weekday {
-                    lineStat("Your night", "\(day)s", "calendar")
+                if let index = wrap.busiest_weekday_index {
+                    lineStat("Your night", weekdayName(index), "calendar")
                 }
                 if let hour = wrap.latest_end_hour {
                     lineStat("Latest you called it", clock(hour), "sunrise.fill")
@@ -205,6 +205,16 @@ struct MonthlyWrapView: View {
         let m = Int((hour - Double(Int(hour))) * 60)
         if h < 0 { h += 24 }
         return String(format: "%02d:%02d", h, m)
+    }
+
+    /// index: Monday = 0 ... Sunday = 6 (as sent by the backend).
+    /// `weekdaySymbols` is always Sunday-first regardless of locale, so
+    /// we shift into that frame before indexing.
+    private func weekdayName(_ index: Int) -> String {
+        let sundayFirst = (index + 1) % 7
+        let symbols = Calendar.current.weekdaySymbols
+        guard symbols.indices.contains(sundayFirst) else { return "" }
+        return symbols[sundayFirst]
     }
 
     private func monthName(_ ym: String) -> String {
