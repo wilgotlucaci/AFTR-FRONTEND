@@ -35,9 +35,10 @@ struct AFTRWidgetsLiveActivity: Widget {
                     }
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text(context.state.startedAt, style: .timer)
-                        .font(.subheadline.monospacedDigit())
-                        .foregroundStyle(.white.opacity(0.65))
+                    Text("NIGHT ACTIVE")
+                        .font(.system(size: 9, weight: .bold, design: .rounded))
+                        .tracking(1.1)
+                        .foregroundStyle(neonPink)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     endNightButton(context: context)
@@ -46,10 +47,10 @@ struct AFTRWidgetsLiveActivity: Widget {
             } compactLeading: {
                 aftrMark(size: 15)
             } compactTrailing: {
-                Text(context.state.startedAt, style: .timer)
-                    .font(.caption2.monospacedDigit())
-                    .foregroundStyle(neonPink)
-                    .frame(width: 44)
+                Circle()
+                    .fill(neonPink)
+                    .frame(width: 7, height: 7)
+                    .shadow(color: neonPink, radius: 3)
             } minimal: {
                 aftrMark(size: 15)
             }
@@ -86,12 +87,7 @@ struct AFTRWidgetsLiveActivity: Widget {
                             .lineLimit(1)
                     }
 
-                    Spacer()
-
-                    Text(context.state.startedAt, style: .timer)
-                        .font(.system(size: 20, weight: .semibold, design: .rounded))
-                        .monospacedDigit()
-                        .foregroundStyle(.white.opacity(0.85))
+                    Spacer(minLength: 0)
                 }
 
                 endNightButton(context: context)

@@ -20,6 +20,10 @@ struct EndNightIntent: LiveActivityIntent {
     @Parameter(title: "Night ID")
     var nightId: String
 
+    static var parameterSummary: some ParameterSummary {
+        Summary("End Night")
+    }
+
     init() {
         nightId = ""
     }

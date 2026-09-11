@@ -161,7 +161,7 @@ struct ActiveNightView: View {
                     Color.white.opacity(0.55)
                 )
             }
-            .frame(width: 38, alignment: .trailing)
+            .fixedSize()
         }
     }
 
