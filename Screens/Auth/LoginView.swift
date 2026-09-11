@@ -6,6 +6,7 @@ struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var status = ""
+    @State private var statusIsSuccess = false
     @State private var isLoading = false
     @State private var showPassword = false
     @State private var showSignUp = false
@@ -361,11 +362,13 @@ struct LoginView: View {
                             .tint(.black)
                     }
 
-                    Text(
-                        isLoading
-                            ? "Logging in..."
-                            : "Log in"
-                    )
+                    Group {
+                        if isLoading {
+                            Text("Logging in...")
+                        } else {
+                            Text("Log in")
+                        }
+                    }
                     .font(
                         .system(
                             size: 17,
@@ -409,7 +412,7 @@ struct LoginView: View {
                 HStack(spacing: 8) {
                     Image(
                         systemName:
-                            status == "Logged in"
+                            statusIsSuccess
                             ? "checkmark.circle.fill"
                             : "exclamationmark.circle.fill"
                     )
@@ -418,7 +421,7 @@ struct LoginView: View {
                 }
                 .font(.caption)
                 .foregroundStyle(
-                    status == "Logged in"
+                    statusIsSuccess
                         ? .green
                         : .red
                 )
@@ -428,12 +431,14 @@ struct LoginView: View {
 
     private func signIn() {
         guard !email.isEmpty else {
-            status = "Enter your email."
+            statusIsSuccess = false
+            status = String(localized: "Enter your email.")
             return
         }
 
         guard !password.isEmpty else {
-            status = "Enter your password."
+            statusIsSuccess = false
+            status = String(localized: "Enter your password.")
             return
         }
 
@@ -449,12 +454,14 @@ struct LoginView: View {
 
                 await MainActor.run {
                     isLoading = false
-                    status = "Logged in"
+                    statusIsSuccess = true
+                    status = String(localized: "Logged in")
                     isLoggedIn = true
                 }
             } catch {
                 await MainActor.run {
                     isLoading = false
+                    statusIsSuccess = false
                     status = error.localizedDescription
                 }
             }

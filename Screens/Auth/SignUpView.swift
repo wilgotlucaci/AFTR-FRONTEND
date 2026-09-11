@@ -189,8 +189,14 @@ struct SignUpView: View {
                         ProgressView().tint(.black)
                     }
 
-                    Text(isLoading ? "Creating…" : "Create account")
-                        .font(.system(size: 17, weight: .semibold))
+                    Group {
+                        if isLoading {
+                            Text("Creating…")
+                        } else {
+                            Text("Create account")
+                        }
+                    }
+                    .font(.system(size: 17, weight: .semibold))
 
                     if !isLoading {
                         Image(systemName: "arrow.right")
@@ -223,10 +229,10 @@ struct SignUpView: View {
     }
 
     private func field(
-        label: String,
+        label: LocalizedStringKey,
         systemImage: String,
         text: Binding<String>,
-        prompt: String
+        prompt: LocalizedStringKey
     ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(label)
@@ -313,15 +319,15 @@ struct SignUpView: View {
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
 
         guard !trimmedName.isEmpty else {
-            fail("Enter your name.")
+            fail(String(localized: "Enter your name."))
             return
         }
         guard email.contains("@") else {
-            fail("Enter a valid email.")
+            fail(String(localized: "Enter a valid email."))
             return
         }
         guard password.count >= 6 else {
-            fail("Password needs at least 6 characters.")
+            fail(String(localized: "Password needs at least 6 characters."))
             return
         }
 
@@ -339,8 +345,9 @@ struct SignUpView: View {
                     await MainActor.run {
                         isLoading = false
                         isError = false
-                        status =
-                            "Account created. Check your email to confirm, then log in."
+                        status = String(
+                            localized: "Account created. Check your email to confirm, then log in."
+                        )
                     }
                     return
                 }
