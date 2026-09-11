@@ -18,6 +18,7 @@
 		92C7774F3053D41800433528 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 92C7774E3053D41800433528 /* Localizable.xcstrings */; };
 		92E701C33053E46300F7D8D3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E701C23053E46300F7D8D3 /* WidgetKit.framework */; };
 		92E701C53053E46300F7D8D3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E701C43053E46300F7D8D3 /* SwiftUI.framework */; };
+		EB4F3FD4F4D6852A8F0A5BDA /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E1485EF7D73AD57F7255DB /* AppIntents.framework */; };
 		92E701D43053E46400F7D8D3 /* AFTRWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 92E701C13053E46300F7D8D3 /* AFTRWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B6609857CC504F418440FDB6 /* NightSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22152EE91CD66CDC53A6E280 /* NightSession.swift */; };
 		B869BD9E36A2A800A9BF38DA /* AFTRWidgets/NightActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE14CE22E97A834829B338A /* AFTRWidgets/NightActivityAttributes.swift */; };
@@ -64,6 +65,7 @@
 		92E701C13053E46300F7D8D3 /* AFTRWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AFTRWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E701C23053E46300F7D8D3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		92E701C43053E46300F7D8D3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		88E1485EF7D73AD57F7255DB /* AppIntents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppIntents.framework; path = System/Library/Frameworks/AppIntents.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -127,6 +129,7 @@
 			files = (
 				92E701C53053E46300F7D8D3 /* SwiftUI.framework in Frameworks */,
 				92E701C33053E46300F7D8D3 /* WidgetKit.framework in Frameworks */,
+				EB4F3FD4F4D6852A8F0A5BDA /* AppIntents.framework in Frameworks */,
 				FF4666347922D57542D846A0 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -170,6 +173,7 @@
 			children = (
 				92E701C23053E46300F7D8D3 /* WidgetKit.framework */,
 				92E701C43053E46300F7D8D3 /* SwiftUI.framework */,
+				88E1485EF7D73AD57F7255DB /* AppIntents.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
