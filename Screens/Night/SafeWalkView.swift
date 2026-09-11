@@ -1,5 +1,6 @@
 import SwiftUI
 import CoreLocation
+import Combine
 
 struct SafeWalkView: View {
     let home: HomeLocation
