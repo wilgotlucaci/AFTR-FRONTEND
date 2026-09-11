@@ -21,6 +21,21 @@ enum AppConfig {
     }()
 }
 
+extension ISO8601DateFormatter {
+    /// The backend (Python's `datetime.isoformat()`) always includes
+    /// fractional seconds, which the plain `ISO8601DateFormatter()`
+    /// silently fails to parse - every `started_at`/`ended_at` timestamp
+    /// from the API needs this, not the default formatter.
+    static func aftrDate(from string: String) -> Date? {
+        let withFraction = ISO8601DateFormatter()
+        withFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = withFraction.date(from: string) {
+            return date
+        }
+        return ISO8601DateFormatter().date(from: string)
+    }
+}
+
 struct CreateNightResponse: Decodable {
     let id: String
     let title: String

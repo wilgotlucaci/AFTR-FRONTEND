@@ -815,13 +815,7 @@ struct HomeView: View {
     private func formattedDate(
         _ dateString: String
     ) -> String {
-        let formatter =
-            ISO8601DateFormatter()
-
-        guard let date =
-            formatter.date(
-                from: dateString
-            )
+        guard let date = ISO8601DateFormatter.aftrDate(from: dateString)
         else {
             return String(localized: "Night")
         }
@@ -836,13 +830,7 @@ struct HomeView: View {
     private func formattedShortDate(
         _ dateString: String
     ) -> String {
-        let formatter =
-            ISO8601DateFormatter()
-
-        guard let date =
-            formatter.date(
-                from: dateString
-            )
+        guard let date = ISO8601DateFormatter.aftrDate(from: dateString)
         else {
             return "—"
         }
@@ -955,8 +943,7 @@ struct HomeView: View {
                let ongoing = nights.first(
                    where: { $0.status == "active" }
                ) {
-                let formatter = ISO8601DateFormatter()
-                let startedAt = formatter.date(
+                let startedAt = ISO8601DateFormatter.aftrDate(
                     from: ongoing.started_at
                 ) ?? Date()
 

@@ -964,22 +964,7 @@ struct RecapView: View {
     private func parseISODate(
         _ string: String
     ) -> Date? {
-        let formatter =
-            ISO8601DateFormatter()
-
-        if let date =
-            formatter.date(from: string) {
-            return date
-        }
-
-        formatter.formatOptions = [
-            .withInternetDateTime,
-            .withFractionalSeconds
-        ]
-
-        return formatter.date(
-            from: string
-        )
+        ISO8601DateFormatter.aftrDate(from: string)
     }
 
     @MainActor
