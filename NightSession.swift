@@ -24,6 +24,12 @@ final class NightSession: ObservableObject {
     /// presents SafeWalkView regardless of which screen is on top.
     @Published var pendingSafeWalkHome: HomeLocation?
 
+    /// Set the moment a Night finishes (in-app "End Night", auto-end at
+    /// home, or reconciling one ended via the Lock Screen button) so
+    /// HomeView can jump straight to its recap instead of dropping back
+    /// to the home screen and making the user dig it out of the list.
+    @Published var lastEndedNightId: String?
+
     let locationManager = LocationManager()
     private let apiService = APIService()
 
@@ -99,6 +105,7 @@ final class NightSession: ObservableObject {
         endActivity(nightId: nightId)
         self.nightId = nil
         lastStatus = ""
+        lastEndedNightId = nightId
     }
 
     func endManually() {
@@ -161,6 +168,7 @@ final class NightSession: ObservableObject {
 
                     self.nightId = nil
                     endActivity(nightId: nightId)
+                    lastEndedNightId = nightId
 
                     if offerSafeWalk, let home = self.home {
                         pendingSafeWalkHome = home

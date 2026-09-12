@@ -8,6 +8,7 @@ struct HomeView: View {
     @State private var nights: [NightSummary] = []
     @State private var isLoadingNights = false
     @State private var selectedNight: NightSummary?
+    @State private var justEndedNightId: String?
 
     @State private var joinCode = ""
     @State private var isJoiningNight = false
@@ -46,10 +47,15 @@ struct HomeView: View {
         ZStack {
             background
 
-            if let selectedNight {
+            if let nightId = selectedNight?.id ?? justEndedNightId {
                 RecapView(
-                    nightId: selectedNight.id,
-                    onBack: { self.selectedNight = nil }
+                    nightId: nightId,
+                    onBack: {
+                        selectedNight = nil
+                        justEndedNightId = nil
+                        session.lastEndedNightId = nil
+                        Task { await loadNights() }
+                    }
                 )
 
             } else {
@@ -115,6 +121,14 @@ struct HomeView: View {
         .onChange(of: scenePhase) { _, newPhase in
             guard newPhase == .active else { return }
             Task { await loadNights() }
+        }
+        // Jump straight to the recap the moment a Night finishes -
+        // in-app "End Night", auto-end at home, or discovering one that
+        // ended via the Lock Screen button - rather than dropping back
+        // to Home and making the user go find it in the list.
+        .onChange(of: session.lastEndedNightId) { _, nightId in
+            guard let nightId else { return }
+            justEndedNightId = nightId
         }
         .sheet(isPresented: $showWrap) {
             MonthlyWrapView()
@@ -1051,8 +1065,16 @@ struct HomeView: View {
                 )
             }
         } catch {
-            status = String(localized: "Could not load Nights:")
-                + " \(error.localizedDescription)"
+            // This runs silently every time the app foregrounds (see the
+            // scenePhase/.task hooks that call loadNights()), often while
+            // Render's free tier is still waking up from sleep - showing
+            // it as a user-facing error would mean a scary red banner
+            // popping up at random over whatever the user is doing,
+            // for a background refresh that isn't actionable anyway.
+            // The `status` field stays reserved for direct results of
+            // things the user actually just did (starting/joining a
+            // Night).
+            print("[HomeView] loadNights failed:", error)
         }
 
         isLoadingNights = false
