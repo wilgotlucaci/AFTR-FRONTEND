@@ -1,4 +1,3 @@
-import ActivityKit
 import AppIntents
 import Auth
 import Foundation
@@ -16,11 +15,21 @@ private let logger = Logger(subsystem: "com.wilgot.AFTR.AFTRWidgets", category: 
 /// extension's process - the app is never opened, so ending a Night stays
 /// exactly one tap, no unlocking-and-waiting required.
 ///
+/// This intentionally does NOT try to touch the Live Activity object
+/// itself (no `Activity<T>.activities` / `.activityUpdates` lookups).
+/// Both were tried and confirmed broken in this exact execution context
+/// on-device: `.activities` never populates (stays empty even after
+/// seconds of retrying), and `.activityUpdates` doesn't respond to task
+/// cancellation, which made `perform()` hang indefinitely and wedged the
+/// Lock Screen's own unlock gesture along with it. Ending the Night on
+/// the backend is the one part that's reliably fast and safe here - the
+/// main app's own `NightSession.reconcile` picks up the change and ends
+/// the Live Activity correctly (from the main app's process, where
+/// `Activity<T>.activities` works fine) the next time it's foregrounded.
+///
 /// The extension has its own copy of the signed-in session (shared via a
 /// Keychain access group - see `WidgetSupabase`), so it can call the
-/// backend directly. The main app reconciles itself (stops location
-/// tracking, clears its local "night active" state) the next time it's
-/// foregrounded - see `NightSession.reconcile`.
+/// backend directly.
 struct EndNightIntent: LiveActivityIntent {
     static var title: LocalizedStringResource = "End Night"
 
@@ -41,13 +50,6 @@ struct EndNightIntent: LiveActivityIntent {
 
     func perform() async throws -> some IntentResult {
         logger.notice("perform() called. nightId = \(nightId, privacy: .public)")
-        // Update the Live Activity FIRST. The network call afterward can
-        // take an unpredictable amount of time (or the extension's
-        // execution window can be cut short by the system before it gets
-        // there) - the user-visible confirmation must not depend on it
-        // finishing. Ending the backend Night is still awaited below so
-        // the request is actually sent before perform() returns.
-        await dismissActivity()
         await endOnBackend()
         logger.notice("perform() finished.")
         return .result()
@@ -89,59 +91,6 @@ struct EndNightIntent: LiveActivityIntent {
             logger.notice("Response status = \(status, privacy: .public) body = \(body, privacy: .public)")
         } catch {
             logger.error("endOnBackend FAILED: \(String(describing: error), privacy: .public)")
-        }
-    }
-
-    private func dismissActivity() async {
-        // Confirmed via device logs: Activity<T>.activities (the static
-        // snapshot) stays empty in the fresh process the system spawns to
-        // run this intent, even after retrying for seconds - it never
-        // syncs. activityUpdates (the async stream) is Apple's documented
-        // way to see activities another process already started: it
-        // replays every currently-running activity to a new subscriber
-        // as soon as it connects, which is exactly what's needed here.
-        //
-        // Bounded to ~1.5s: taking longer makes the system think this
-        // intent is stuck and re-dispatch it, which caused duplicate
-        // "end" calls to hit the backend (seen as 500s in device logs).
-        guard let activity = await firstActivity(matching: nightId, timeout: .milliseconds(1500)) else {
-            logger.error("No activity with nightId \(nightId, privacy: .public) showed up via activityUpdates within the timeout.")
-            return
-        }
-
-        var endedState = activity.content.state
-        endedState.isEnded = true
-
-        logger.notice("Ending activity \(activity.id, privacy: .public)")
-
-        // Show the "Night Ended" confirmation for a few seconds rather
-        // than either vanishing instantly or looking stuck.
-        await activity.end(
-            ActivityContent(state: endedState, staleDate: nil),
-            dismissalPolicy: .after(Date().addingTimeInterval(8))
-        )
-        logger.notice("Ended activity \(activity.id, privacy: .public)")
-    }
-
-    private func firstActivity(
-        matching nightId: String, timeout: Duration
-    ) async -> Activity<NightActivityAttributes>? {
-        await withTaskGroup(of: Activity<NightActivityAttributes>?.self) { group in
-            group.addTask {
-                for await activity in Activity<NightActivityAttributes>.activityUpdates
-                where activity.attributes.nightId == nightId {
-                    return activity
-                }
-                return nil
-            }
-            group.addTask {
-                try? await Task.sleep(for: timeout)
-                return nil
-            }
-
-            let result = await group.next() ?? nil
-            group.cancelAll()
-            return result
         }
     }
 }
