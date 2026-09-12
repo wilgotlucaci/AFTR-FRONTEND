@@ -42,7 +42,7 @@ struct AFTRWidgetsLiveActivity: Widget {
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     if context.state.isEnded {
-                        Text("Building your recap...")
+                        Text("Recap being generated...")
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(Color.white.opacity(0.55))
                             .padding(.top, 4)
@@ -105,7 +105,7 @@ struct AFTRWidgetsLiveActivity: Widget {
                 }
 
                 if context.state.isEnded {
-                    Text("AFTR is building your recap.")
+                    Text("Recap being generated...")
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(Color.white.opacity(0.55))
                 } else {

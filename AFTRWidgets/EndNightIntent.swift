@@ -34,8 +34,14 @@ struct EndNightIntent: LiveActivityIntent {
 
     func perform() async throws -> some IntentResult {
         print("🔴 [EndNightIntent] perform() called. nightId =", nightId)
-        await endOnBackend()
+        // Update the Live Activity FIRST. The network call afterward can
+        // take an unpredictable amount of time (or the extension's
+        // execution window can be cut short by the system before it gets
+        // there) - the user-visible confirmation must not depend on it
+        // finishing. Ending the backend Night is still awaited below so
+        // the request is actually sent before perform() returns.
         await dismissActivity()
+        await endOnBackend()
         print("🔴 [EndNightIntent] perform() finished.")
         return .result()
     }
