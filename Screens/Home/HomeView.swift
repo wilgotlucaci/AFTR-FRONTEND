@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var nightTitle = "Friday Night"
+    @State private var nightTitle = ""
     @State private var isStartingNight = false
     @State private var status = ""
 
@@ -472,7 +472,7 @@ struct HomeView: View {
             TextField(
                 "",
                 text: $nightTitle,
-                prompt: Text("Night title")
+                prompt: Text("Name your night")
                     .foregroundStyle(
                         Color.white.opacity(0.40)
                     )
