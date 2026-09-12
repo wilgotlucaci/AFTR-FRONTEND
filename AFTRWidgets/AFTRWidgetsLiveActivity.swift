@@ -35,14 +35,21 @@ struct AFTRWidgetsLiveActivity: Widget {
                     }
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text("NIGHT ACTIVE")
+                    Text(context.state.isEnded ? "ENDED" : "NIGHT ACTIVE")
                         .font(.system(size: 9, weight: .bold, design: .rounded))
                         .tracking(1.1)
                         .foregroundStyle(neonPink)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    endNightButton(context: context)
-                        .padding(.top, 4)
+                    if context.state.isEnded {
+                        Text("Building your recap...")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(Color.white.opacity(0.55))
+                            .padding(.top, 4)
+                    } else {
+                        endNightButton(context: context)
+                            .padding(.top, 4)
+                    }
                 }
             } compactLeading: {
                 aftrMark(size: 15)
@@ -72,11 +79,18 @@ struct AFTRWidgetsLiveActivity: Widget {
                         Circle()
                             .fill(neonPink.opacity(0.16))
                             .frame(width: 38, height: 38)
-                        aftrMark(size: 18)
+
+                        if context.state.isEnded {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundStyle(neonPink)
+                        } else {
+                            aftrMark(size: 18)
+                        }
                     }
 
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("NIGHT ACTIVE")
+                        Text(context.state.isEnded ? "NIGHT ENDED" : "NIGHT ACTIVE")
                             .font(.system(size: 10, weight: .bold, design: .rounded))
                             .tracking(1.4)
                             .foregroundStyle(neonPink)
@@ -90,7 +104,13 @@ struct AFTRWidgetsLiveActivity: Widget {
                     Spacer(minLength: 0)
                 }
 
-                endNightButton(context: context)
+                if context.state.isEnded {
+                    Text("AFTR is building your recap.")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(Color.white.opacity(0.55))
+                } else {
+                    endNightButton(context: context)
+                }
             }
             .padding(16)
         }

@@ -221,7 +221,16 @@ final class NightSession: ObservableObject {
         Task {
             for activity in Activity<NightActivityAttributes>.activities
             where activity.attributes.nightId == nightId {
-                await activity.end(nil, dismissalPolicy: .immediate)
+                var endedState = activity.content.state
+                endedState.isEnded = true
+
+                // Same "Night Ended" confirmation as the Lock Screen
+                // button's own end path (EndNightIntent), so it looks
+                // the same regardless of which one someone used.
+                await activity.end(
+                    ActivityContent(state: endedState, staleDate: nil),
+                    dismissalPolicy: .after(Date().addingTimeInterval(8))
+                )
             }
         }
     }

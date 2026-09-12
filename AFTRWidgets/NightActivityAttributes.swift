@@ -8,6 +8,10 @@ struct NightActivityAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
         var nightTitle: String
         var startedAt: Date
+        /// Set right before the Activity is dismissed so the Lock Screen
+        /// can show a brief "Night Ended" confirmation instead of either
+        /// vanishing silently or looking stuck on "Night Active".
+        var isEnded: Bool = false
     }
 
     var nightId: String

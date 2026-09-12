@@ -88,7 +88,15 @@ struct EndNightIntent: LiveActivityIntent {
 
         for activity in activities
         where activity.attributes.nightId == nightId {
-            await activity.end(nil, dismissalPolicy: .immediate)
+            var endedState = activity.content.state
+            endedState.isEnded = true
+
+            // Show the "Night Ended" confirmation for a few seconds
+            // rather than either vanishing instantly or looking stuck.
+            await activity.end(
+                ActivityContent(state: endedState, staleDate: nil),
+                dismissalPolicy: .after(Date().addingTimeInterval(8))
+            )
             print("🔴 [EndNightIntent] Ended activity", activity.id)
         }
     }
