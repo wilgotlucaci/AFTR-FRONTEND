@@ -2,7 +2,14 @@ import ActivityKit
 import AppIntents
 import Auth
 import Foundation
+import os
 import Supabase
+
+/// Bare `print()` from code invoked by the system's BackgroundShortcutRunner
+/// (which is what actually hosts a Live Activity button's intent when the
+/// phone is locked) does not reliably reach the unified log - `os.Logger`
+/// does, so use it for anything we need to see in Console.app.
+private let logger = Logger(subsystem: "com.wilgot.AFTR.AFTRWidgets", category: "EndNightIntent")
 
 /// Runs when the "End Night" button on the Lock Screen / Dynamic Island
 /// is tapped. As a `LiveActivityIntent` this executes right in the widget
@@ -33,7 +40,7 @@ struct EndNightIntent: LiveActivityIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        print("🔴 [EndNightIntent] perform() called. nightId =", nightId)
+        logger.notice("perform() called. nightId = \(nightId, privacy: .public)")
         // Update the Live Activity FIRST. The network call afterward can
         // take an unpredictable amount of time (or the extension's
         // execution window can be cut short by the system before it gets
@@ -42,32 +49,32 @@ struct EndNightIntent: LiveActivityIntent {
         // the request is actually sent before perform() returns.
         await dismissActivity()
         await endOnBackend()
-        print("🔴 [EndNightIntent] perform() finished.")
+        logger.notice("perform() finished.")
         return .result()
     }
 
     private func endOnBackend() async {
         do {
             let session = try await WidgetSupabase.client.auth.session
-            print("🔴 [EndNightIntent] Got session. userId =", session.user.id)
+            logger.notice("Got session. userId = \(session.user.id.uuidString, privacy: .public)")
 
             let lang = Locale.current.language.languageCode?.identifier ?? "en"
 
             guard var components = URLComponents(
                 string: "\(SharedConfig.apiBaseURL)/nights/\(nightId)/end"
             ) else {
-                print("🔴 [EndNightIntent] Bad URL components.")
+                logger.error("Bad URL components.")
                 return
             }
 
             components.queryItems = [URLQueryItem(name: "lang", value: lang)]
 
             guard let url = components.url else {
-                print("🔴 [EndNightIntent] Bad URL.")
+                logger.error("Bad URL.")
                 return
             }
 
-            print("🔴 [EndNightIntent] POSTing to", url.absoluteString)
+            logger.notice("POSTing to \(url.absoluteString, privacy: .public)")
 
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
@@ -79,23 +86,29 @@ struct EndNightIntent: LiveActivityIntent {
             let (data, response) = try await URLSession.shared.data(for: request)
             let status = (response as? HTTPURLResponse)?.statusCode ?? -1
             let body = String(data: data, encoding: .utf8) ?? "<non-utf8>"
-            print("🔴 [EndNightIntent] Response status =", status, "body =", body)
+            logger.notice("Response status = \(status, privacy: .public) body = \(body, privacy: .public)")
         } catch {
-            print("🔴 [EndNightIntent] endOnBackend FAILED:", error)
+            logger.error("endOnBackend FAILED: \(String(describing: error), privacy: .public)")
         }
     }
 
     private func dismissActivity() async {
         let activities = Activity<NightActivityAttributes>.activities
-        print(
-            "🔴 [EndNightIntent] Activities visible to extension:",
-            activities.map(\.attributes.nightId)
+        logger.notice(
+            "Activities visible to extension: \(activities.map(\.attributes.nightId), privacy: .public)"
         )
+
+        guard !activities.isEmpty else {
+            logger.error("No activities visible at all in this process - Activity<NightActivityAttributes>.activities is empty.")
+            return
+        }
 
         for activity in activities
         where activity.attributes.nightId == nightId {
             var endedState = activity.content.state
             endedState.isEnded = true
+
+            logger.notice("Ending activity \(activity.id, privacy: .public), state before end: \(String(describing: activity.activityState), privacy: .public)")
 
             // Show the "Night Ended" confirmation for a few seconds
             // rather than either vanishing instantly or looking stuck.
@@ -103,7 +116,7 @@ struct EndNightIntent: LiveActivityIntent {
                 ActivityContent(state: endedState, staleDate: nil),
                 dismissalPolicy: .after(Date().addingTimeInterval(8))
             )
-            print("🔴 [EndNightIntent] Ended activity", activity.id)
+            logger.notice("Ended activity \(activity.id, privacy: .public)")
         }
     }
 }
