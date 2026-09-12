@@ -50,8 +50,8 @@ struct RecapView: View {
         }
         .overlay(alignment: .top) { statusBarScrim }
         .overlay(alignment: .bottom) {
-            if let recap {
-                pageIndicator(recap)
+            if recap != nil {
+                pageIndicator
             }
         }
         .task {
@@ -193,13 +193,10 @@ struct RecapView: View {
     /// Floating pill making the second (Group) page discoverable -
     /// without this there's no visual hint that swiping left does
     /// anything. Doubles as a tap target so it's not swipe-only.
-    private func pageIndicator(_ recap: RecapModel) -> some View {
+    private var pageIndicator: some View {
         HStack(spacing: 6) {
-            pageIndicatorLabel("Stats", page: 0)
-            pageIndicatorLabel(
-                recap.participants.count <= 1 ? "Solo" : "Group",
-                page: 1
-            )
+            pageIndicatorLabel("Solo", page: 0)
+            pageIndicatorLabel("Group", page: 1)
         }
         .padding(4)
         .background(
