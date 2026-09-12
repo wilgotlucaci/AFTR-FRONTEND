@@ -169,15 +169,28 @@ final class NightSession: ObservableObject {
     private func startOrReuseActivity(
         nightId: String, title: String, startedAt: Date
     ) {
-        guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
+        let authInfo = ActivityAuthorizationInfo()
+        print("[LiveActivity] areActivitiesEnabled =", authInfo.areActivitiesEnabled)
+        print("[LiveActivity] frequentPushesEnabled =", authInfo.frequentPushesEnabled)
+
+        guard authInfo.areActivitiesEnabled else {
+            print("[LiveActivity] Skipping request - Activities are not enabled.")
+            return
+        }
 
         let state = NightActivityAttributes.ContentState(
             nightTitle: title, startedAt: startedAt
         )
 
+        print(
+            "[LiveActivity] Existing activities:",
+            Activity<NightActivityAttributes>.activities.map(\.attributes.nightId)
+        )
+
         if let existing = Activity<NightActivityAttributes>.activities.first(
             where: { $0.attributes.nightId == nightId }
         ) {
+            print("[LiveActivity] Reusing existing activity for", nightId)
             Task {
                 await existing.update(
                     ActivityContent(state: state, staleDate: nil)
@@ -187,13 +200,20 @@ final class NightSession: ObservableObject {
         }
 
         do {
-            _ = try Activity.request(
+            let activity = try Activity.request(
                 attributes: NightActivityAttributes(nightId: nightId),
                 content: ActivityContent(state: state, staleDate: nil)
             )
+            print(
+                "[LiveActivity] Requested successfully. id =", activity.id,
+                "activityState =", activity.activityState
+            )
         } catch {
             // Live Activities are a nice-to-have; never block the Night
-            // itself on this (e.g. the user may have them disabled).
+            // itself on this (e.g. the user may have them disabled) -
+            // but do surface it loudly in the console so it's not a
+            // silent mystery during development.
+            print("[LiveActivity] Activity.request FAILED:", error)
         }
     }
 
