@@ -17,8 +17,9 @@ struct RecapModel: Decodable {
 
     let fun_highlights: [FunHighlight]
 
-    // Added after some recaps were already saved, so it is optional.
+    // Added after some recaps were already saved, so both are optional.
     let route: [RouteParticipant]?
+    let group_highlights: [FunHighlight]?
 }
 
 struct RecapParticipant: Decodable, Identifiable {

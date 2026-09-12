@@ -38,37 +38,11 @@ struct RecapView: View {
             if isLoading {
                 loadingView
             } else if let recap {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 26) {
-                        heroSection(recap)
-
-                        durationCard(recap)
-
-                        quickStatsSection(recap)
-
-                        if !recap.fun_highlights.isEmpty {
-                            funHighlightsSection(recap)
-                        }
-
-                        if hasRoute(recap) {
-                            routeMapSection(recap)
-                        }
-
-                        if !recap.venue_timeline.isEmpty {
-                            venueTimelineSection(recap)
-                        }
-
-                        bestMomentsSection(recap)
-
-                        movementSection(recap)
-
-                        footer
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 16)
-                    .padding(.bottom, 50)
+                TabView {
+                    statsPage(recap)
+                    GroupRecapView(recap: recap)
                 }
-                .scrollIndicators(.hidden)
+                .tabViewStyle(.page)
             } else {
                 errorView
             }
@@ -93,6 +67,40 @@ struct RecapView: View {
                 )
             }
         }
+    }
+
+    private func statsPage(_ recap: RecapModel) -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 26) {
+                heroSection(recap)
+
+                durationCard(recap)
+
+                quickStatsSection(recap)
+
+                if !recap.fun_highlights.isEmpty {
+                    funHighlightsSection(recap)
+                }
+
+                if hasRoute(recap) {
+                    routeMapSection(recap)
+                }
+
+                if !recap.venue_timeline.isEmpty {
+                    venueTimelineSection(recap)
+                }
+
+                bestMomentsSection(recap)
+
+                movementSection(recap)
+
+                footer
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
+            .padding(.bottom, 50)
+        }
+        .scrollIndicators(.hidden)
     }
 
     private var background: some View {
