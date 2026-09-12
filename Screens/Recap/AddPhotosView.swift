@@ -139,7 +139,7 @@ struct AddPhotosView: View {
 
     private var emptyView: some View {
         VStack(spacing: 16) {
-            Text("No photos found from around this Night.")
+            Text("No new photos found from around this Night - anything taken during it was likely already added automatically.")
                 .font(.subheadline)
                 .foregroundStyle(.white.opacity(0.7))
                 .multilineTextAlignment(.center)
@@ -251,11 +251,21 @@ struct AddPhotosView: View {
             return
         }
 
+        // Skip anything the live-during-the-Night monitor already added
+        // (NightPhotoMonitor) - this flow is a catch-all for what that
+        // missed, not a second copy of everything.
+        let alreadyAdded: Set<String>
+        if let existing = try? await apiService.getMedia(nightId: nightId) {
+            alreadyAdded = Set(existing.compactMap(\.source_asset_id))
+        } else {
+            alreadyAdded = []
+        }
+
         let found = PhotoSelector.candidates(
             start: start,
             end: end,
             near: routeCoordinates
-        )
+        ).filter { !alreadyAdded.contains($0.localIdentifier) }
 
         guard !found.isEmpty else {
             phase = .empty
@@ -285,6 +295,7 @@ struct AddPhotosView: View {
         let takenAt: String?
         let latitude: Double?
         let longitude: Double?
+        let sourceAssetId: String?
     }
 
     @MainActor
@@ -313,7 +324,8 @@ struct AddPhotosView: View {
                     takenAt: asset.creationDate
                         .map(formatter.string(from:)),
                     latitude: asset.location?.coordinate.latitude,
-                    longitude: asset.location?.coordinate.longitude
+                    longitude: asset.location?.coordinate.longitude,
+                    sourceAssetId: asset.localIdentifier
                 )
             )
         }
@@ -346,7 +358,8 @@ struct AddPhotosView: View {
                     filename: "pick-\(index).jpg",
                     takenAt: nil,
                     latitude: nil,
-                    longitude: nil
+                    longitude: nil,
+                    sourceAssetId: nil
                 )
             )
         }
@@ -380,7 +393,8 @@ struct AddPhotosView: View {
                             filename: item.filename,
                             takenAt: item.takenAt,
                             latitude: item.latitude,
-                            longitude: item.longitude
+                            longitude: item.longitude,
+                            sourceAssetId: item.sourceAssetId
                         )
                         return true
                     } catch {

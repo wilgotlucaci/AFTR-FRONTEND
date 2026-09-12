@@ -30,6 +30,7 @@ final class NightSession: ObservableObject {
     private var home: HomeLocation?
     private var nearHomeSince: Date?
     private var cancellables = Set<AnyCancellable>()
+    private var photoMonitor: NightPhotoMonitor?
 
     var isActive: Bool { nightId != nil }
 
@@ -70,6 +71,15 @@ final class NightSession: ObservableObject {
         }
 
         startOrReuseActivity(nightId: nightId, title: title, startedAt: startedAt)
+
+        let monitor = NightPhotoMonitor(nightId: nightId, startedAt: startedAt)
+        photoMonitor = monitor
+        monitor.start()
+    }
+
+    private func stopPhotoMonitor() {
+        photoMonitor?.stop()
+        photoMonitor = nil
     }
 
     /// Reconciles local state with the server's list of active Nights.
@@ -85,6 +95,7 @@ final class NightSession: ObservableObject {
         else { return }
 
         locationManager.stopTracking()
+        stopPhotoMonitor()
         endActivity(nightId: nightId)
         self.nightId = nil
         lastStatus = ""
@@ -126,6 +137,7 @@ final class NightSession: ObservableObject {
         isEndingNight = true
         lastStatus = String(localized: "Finishing your recap...")
         locationManager.stopTracking()
+        stopPhotoMonitor()
 
         Task {
             do {

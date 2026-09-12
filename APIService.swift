@@ -336,7 +336,8 @@ final class APIService {
         filename: String,
         takenAt: String?,
         latitude: Double?,
-        longitude: Double?
+        longitude: Double?,
+        sourceAssetId: String? = nil
     ) async throws -> UploadMediaResponse {
         let token = try await authService.accessToken()
 
@@ -378,6 +379,9 @@ final class APIService {
         }
         if let longitude {
             appendField("longitude", String(longitude))
+        }
+        if let sourceAssetId {
+            appendField("source_asset_id", sourceAssetId)
         }
 
         body.append("--\(boundary)\r\n".data(using: .utf8)!)

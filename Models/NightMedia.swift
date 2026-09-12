@@ -8,6 +8,7 @@ struct NightMedia: Decodable, Identifiable {
     let longitude: Double?
     let venue_name: String?
     let url: String?
+    let source_asset_id: String?
 
     var imageURL: URL? {
         guard let url else { return nil }
