@@ -119,18 +119,21 @@ struct HomeView: View {
                 Circle()
                     .fill(Color.green)
                     .frame(width: 7, height: 7)
+                    .shadow(color: .green.opacity(0.7), radius: 3)
 
                 Text("NIGHT ACTIVE")
                     .font(.caption2)
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
                     .tracking(1.2)
+                    .foregroundStyle(neonPink)
 
                 Text("·")
-                    .foregroundStyle(Color.white.opacity(0.4))
+                    .foregroundStyle(Color.white.opacity(0.25))
 
                 Text(session.nightTitle)
                     .font(.caption)
                     .fontWeight(.semibold)
+                    .foregroundStyle(.white)
                     .lineLimit(1)
 
                 Spacer()
@@ -138,26 +141,39 @@ struct HomeView: View {
                 TimelineView(.periodic(from: .now, by: 1)) { context in
                     Text(elapsed(session.startedAt, context.date))
                         .font(.caption.monospacedDigit())
-                        .foregroundStyle(Color.white.opacity(0.6))
+                        .foregroundStyle(Color.white.opacity(0.5))
                 }
 
                 Image(systemName: "chevron.right")
                     .font(.caption2)
-                    .foregroundStyle(Color.white.opacity(0.4))
+                    .foregroundStyle(Color.white.opacity(0.3))
             }
-            .foregroundStyle(.white)
             .padding(.horizontal, 16)
-            .padding(.vertical, 11)
+            .padding(.vertical, 12)
             .background(
-                LinearGradient(
-                    colors: [
-                        neonPink.opacity(0.85),
-                        neonPink.opacity(0.55)
-                    ],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
+                ZStack {
+                    // Fully opaque base first - the pink/purple tint on
+                    // top can be as translucent as it likes without ever
+                    // letting scrolled-past content show through during
+                    // overscroll (the previous version's background was
+                    // a translucent color with nothing solid behind it).
+                    Color.black
+
+                    LinearGradient(
+                        colors: [
+                            neonPink.opacity(0.24),
+                            Color.purple.opacity(0.12)
+                        ],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                }
             )
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(neonPink.opacity(0.30))
+                    .frame(height: 1)
+            }
         }
         .buttonStyle(.plain)
     }
