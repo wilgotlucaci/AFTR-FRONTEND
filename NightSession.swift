@@ -196,24 +196,51 @@ final class NightSession: ObservableObject {
                     ActivityContent(state: state, staleDate: nil)
                 )
             }
+            observePushToken(of: existing, nightId: nightId)
             return
         }
 
         do {
             let activity = try Activity.request(
                 attributes: NightActivityAttributes(nightId: nightId),
-                content: ActivityContent(state: state, staleDate: nil)
+                content: ActivityContent(state: state, staleDate: nil),
+                pushType: .token
             )
             print(
                 "[LiveActivity] Requested successfully. id =", activity.id,
                 "activityState =", activity.activityState
             )
+            observePushToken(of: activity, nightId: nightId)
         } catch {
             // Live Activities are a nice-to-have; never block the Night
             // itself on this (e.g. the user may have them disabled) -
             // but do surface it loudly in the console so it's not a
             // silent mystery during development.
             print("[LiveActivity] Activity.request FAILED:", error)
+        }
+    }
+
+    /// Forwards the Activity's push token to the backend so it can push an
+    /// "ended" update directly (via APNs) when the Night ends - this works
+    /// regardless of which process actually triggers the end (including
+    /// the Lock Screen button, which runs in an ephemeral extension process
+    /// that can't reliably touch the Activity object itself - see
+    /// EndNightIntent).
+    private func observePushToken(
+        of activity: Activity<NightActivityAttributes>, nightId: String
+    ) {
+        Task {
+            for await tokenData in activity.pushTokenUpdates {
+                let token = tokenData.map { String(format: "%02x", $0) }.joined()
+                print("[LiveActivity] Push token for \(nightId): \(token)")
+                do {
+                    try await apiService.sendLiveActivityPushToken(
+                        nightId: nightId, token: token
+                    )
+                } catch {
+                    print("[LiveActivity] Failed to send push token:", error)
+                }
+            }
         }
     }
 

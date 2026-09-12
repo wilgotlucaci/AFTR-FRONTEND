@@ -457,6 +457,17 @@ final class APIService {
         try validate(response)
     }
 
+    func sendLiveActivityPushToken(
+        nightId: String,
+        token: String
+    ) async throws {
+        _ = try await sendRaw(
+            "/nights/\(nightId)/live-activity-token",
+            method: "POST",
+            body: ["push_token": token]
+        )
+    }
+
     func endNight(
         nightId: String
     ) async throws {
