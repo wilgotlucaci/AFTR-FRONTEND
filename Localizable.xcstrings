@@ -182,10 +182,16 @@
     "Finishing your recap..." : {
 
     },
+    "Flying Solo" : {
+
+    },
     "from first moment to last" : {
 
     },
     "Get home safe" : {
+
+    },
+    "GROUP RECAP" : {
 
     },
     "HOME" : {
@@ -284,6 +290,9 @@
     "No nights yet this month" : {
 
     },
+    "Nothing to report from the group tonight." : {
+
+    },
     "Offer “get home safe” after a Night" : {
 
     },
@@ -318,6 +327,9 @@
 
     },
     "Places · %lld stops" : {
+
+    },
+    "PLACES YOU VISITED TOGETHER" : {
 
     },
     "Preparing link…" : {
@@ -374,6 +386,9 @@
     "Skip" : {
 
     },
+    "SOLO NIGHT" : {
+
+    },
     "START A NIGHT" : {
 
     },
@@ -396,6 +411,9 @@
 
     },
     "THE ROUTE" : {
+
+    },
+    "Together Tonight" : {
 
     },
     "TOTAL NIGHT" : {

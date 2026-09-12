@@ -12,6 +12,7 @@ struct RecapView: View {
     @State private var media: [NightMedia] = []
     @State private var showAddPhotos = false
     @State private var viewerStart: ViewerStart?
+    @State private var selectedPage = 0
 
     private struct ViewerStart: Identifiable {
         let id: Int
@@ -38,16 +39,21 @@ struct RecapView: View {
             if isLoading {
                 loadingView
             } else if let recap {
-                TabView {
-                    statsPage(recap)
-                    GroupRecapView(recap: recap)
+                TabView(selection: $selectedPage) {
+                    statsPage(recap).tag(0)
+                    GroupRecapView(recap: recap).tag(1)
                 }
-                .tabViewStyle(.page)
+                .tabViewStyle(.page(indexDisplayMode: .never))
             } else {
                 errorView
             }
         }
         .overlay(alignment: .top) { statusBarScrim }
+        .overlay(alignment: .bottom) {
+            if let recap {
+                pageIndicator(recap)
+            }
+        }
         .task {
             await loadRecap()
             await loadMedia()
@@ -182,6 +188,53 @@ struct RecapView: View {
         .frame(maxWidth: .infinity, alignment: .top)
         .ignoresSafeArea(edges: .top)
         .allowsHitTesting(false)
+    }
+
+    /// Floating pill making the second (Group) page discoverable -
+    /// without this there's no visual hint that swiping left does
+    /// anything. Doubles as a tap target so it's not swipe-only.
+    private func pageIndicator(_ recap: RecapModel) -> some View {
+        HStack(spacing: 6) {
+            pageIndicatorLabel("Stats", page: 0)
+            pageIndicatorLabel(
+                recap.participants.count <= 1 ? "Solo" : "Group",
+                page: 1
+            )
+        }
+        .padding(4)
+        .background(
+            Capsule().fill(.ultraThinMaterial)
+        )
+        .overlay(
+            Capsule().stroke(Color.white.opacity(0.08), lineWidth: 1)
+        )
+        .padding(.bottom, 14)
+    }
+
+    private func pageIndicatorLabel(
+        _ label: String, page: Int
+    ) -> some View {
+        Text(label)
+            .font(.system(size: 13, weight: .semibold, design: .rounded))
+            .foregroundStyle(
+                selectedPage == page ? .white : .white.opacity(0.5)
+            )
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(
+                Capsule()
+                    .fill(
+                        selectedPage == page
+                            ? neonPink
+                            : Color.clear
+                    )
+            )
+            .contentShape(Capsule())
+            .onTapGesture {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    selectedPage = page
+                }
+            }
     }
 
     private func heroSection(
