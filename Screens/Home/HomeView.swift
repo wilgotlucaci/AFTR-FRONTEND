@@ -22,6 +22,8 @@ struct HomeView: View {
     @State private var showSettings = false
     @State private var showActiveNight = false
 
+    @Environment(\.scenePhase) private var scenePhase
+
     @EnvironmentObject private var session: NightSession
     @Binding var isLoggedIn: Bool
 
@@ -104,6 +106,15 @@ struct HomeView: View {
         }
         .task {
             await loadNights()
+        }
+        // `.task` only fires once, the first time this view appears - it
+        // won't notice a Night that got ended out-of-process (the Lock
+        // Screen button runs in the widget extension, not here) while
+        // the app was merely backgrounded/locked rather than relaunched.
+        // Re-sync every time the app comes back to the foreground too.
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active else { return }
+            Task { await loadNights() }
         }
         .sheet(isPresented: $showWrap) {
             MonthlyWrapView()
