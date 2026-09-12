@@ -33,40 +33,63 @@ struct EndNightIntent: LiveActivityIntent {
     }
 
     func perform() async throws -> some IntentResult {
+        print("🔴 [EndNightIntent] perform() called. nightId =", nightId)
         await endOnBackend()
         await dismissActivity()
+        print("🔴 [EndNightIntent] perform() finished.")
         return .result()
     }
 
     private func endOnBackend() async {
-        guard let session = try? await WidgetSupabase.client.auth.session else {
-            return
+        do {
+            let session = try await WidgetSupabase.client.auth.session
+            print("🔴 [EndNightIntent] Got session. userId =", session.user.id)
+
+            let lang = Locale.current.language.languageCode?.identifier ?? "en"
+
+            guard var components = URLComponents(
+                string: "\(SharedConfig.apiBaseURL)/nights/\(nightId)/end"
+            ) else {
+                print("🔴 [EndNightIntent] Bad URL components.")
+                return
+            }
+
+            components.queryItems = [URLQueryItem(name: "lang", value: lang)]
+
+            guard let url = components.url else {
+                print("🔴 [EndNightIntent] Bad URL.")
+                return
+            }
+
+            print("🔴 [EndNightIntent] POSTing to", url.absoluteString)
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue(
+                "Bearer \(session.accessToken)",
+                forHTTPHeaderField: "Authorization"
+            )
+
+            let (data, response) = try await URLSession.shared.data(for: request)
+            let status = (response as? HTTPURLResponse)?.statusCode ?? -1
+            let body = String(data: data, encoding: .utf8) ?? "<non-utf8>"
+            print("🔴 [EndNightIntent] Response status =", status, "body =", body)
+        } catch {
+            print("🔴 [EndNightIntent] endOnBackend FAILED:", error)
         }
-
-        let lang = Locale.current.language.languageCode?.identifier ?? "en"
-
-        guard var components = URLComponents(
-            string: "\(SharedConfig.apiBaseURL)/nights/\(nightId)/end"
-        ) else { return }
-
-        components.queryItems = [URLQueryItem(name: "lang", value: lang)]
-
-        guard let url = components.url else { return }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue(
-            "Bearer \(session.accessToken)",
-            forHTTPHeaderField: "Authorization"
-        )
-
-        _ = try? await URLSession.shared.data(for: request)
     }
 
     private func dismissActivity() async {
-        for activity in Activity<NightActivityAttributes>.activities
+        let activities = Activity<NightActivityAttributes>.activities
+        print(
+            "🔴 [EndNightIntent] Activities visible to extension:",
+            activities.map(\.attributes.nightId)
+        )
+
+        for activity in activities
         where activity.attributes.nightId == nightId {
             await activity.end(nil, dismissalPolicy: .immediate)
+            print("🔴 [EndNightIntent] Ended activity", activity.id)
         }
     }
 }
