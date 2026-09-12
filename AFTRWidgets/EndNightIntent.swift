@@ -93,13 +93,26 @@ struct EndNightIntent: LiveActivityIntent {
     }
 
     private func dismissActivity() async {
-        let activities = Activity<NightActivityAttributes>.activities
+        // When the Lock Screen button is tapped, the system spawns a fresh
+        // instance of the extension process just to run this intent. That
+        // process's local ActivityKit state hasn't synced from the system
+        // yet at the instant it's launched, so Activity<T>.activities can
+        // come back empty on the first read even though the activity is
+        // very much still running - poll briefly until it shows up.
+        var activities = Activity<NightActivityAttributes>.activities
+        var attempt = 0
+        while activities.isEmpty && attempt < 10 {
+            try? await Task.sleep(nanoseconds: 200_000_000)
+            activities = Activity<NightActivityAttributes>.activities
+            attempt += 1
+        }
+
         logger.notice(
-            "Activities visible to extension: \(activities.map(\.attributes.nightId), privacy: .public)"
+            "Activities visible to extension after \(attempt, privacy: .public) retries: \(activities.map(\.attributes.nightId), privacy: .public)"
         )
 
         guard !activities.isEmpty else {
-            logger.error("No activities visible at all in this process - Activity<NightActivityAttributes>.activities is empty.")
+            logger.error("Still no activities visible in this process after retrying - Activity<NightActivityAttributes>.activities stayed empty.")
             return
         }
 
