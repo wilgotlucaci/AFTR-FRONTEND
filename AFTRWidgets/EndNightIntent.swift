@@ -93,43 +93,55 @@ struct EndNightIntent: LiveActivityIntent {
     }
 
     private func dismissActivity() async {
-        // When the Lock Screen button is tapped, the system spawns a fresh
-        // instance of the extension process just to run this intent. That
-        // process's local ActivityKit state hasn't synced from the system
-        // yet at the instant it's launched, so Activity<T>.activities can
-        // come back empty on the first read even though the activity is
-        // very much still running - poll briefly until it shows up.
-        var activities = Activity<NightActivityAttributes>.activities
-        var attempt = 0
-        while activities.isEmpty && attempt < 10 {
-            try? await Task.sleep(nanoseconds: 200_000_000)
-            activities = Activity<NightActivityAttributes>.activities
-            attempt += 1
-        }
-
-        logger.notice(
-            "Activities visible to extension after \(attempt, privacy: .public) retries: \(activities.map(\.attributes.nightId), privacy: .public)"
-        )
-
-        guard !activities.isEmpty else {
-            logger.error("Still no activities visible in this process after retrying - Activity<NightActivityAttributes>.activities stayed empty.")
+        // Confirmed via device logs: Activity<T>.activities (the static
+        // snapshot) stays empty in the fresh process the system spawns to
+        // run this intent, even after retrying for seconds - it never
+        // syncs. activityUpdates (the async stream) is Apple's documented
+        // way to see activities another process already started: it
+        // replays every currently-running activity to a new subscriber
+        // as soon as it connects, which is exactly what's needed here.
+        //
+        // Bounded to ~1.5s: taking longer makes the system think this
+        // intent is stuck and re-dispatch it, which caused duplicate
+        // "end" calls to hit the backend (seen as 500s in device logs).
+        guard let activity = await firstActivity(matching: nightId, timeout: .milliseconds(1500)) else {
+            logger.error("No activity with nightId \(nightId, privacy: .public) showed up via activityUpdates within the timeout.")
             return
         }
 
-        for activity in activities
-        where activity.attributes.nightId == nightId {
-            var endedState = activity.content.state
-            endedState.isEnded = true
+        var endedState = activity.content.state
+        endedState.isEnded = true
 
-            logger.notice("Ending activity \(activity.id, privacy: .public), state before end: \(String(describing: activity.activityState), privacy: .public)")
+        logger.notice("Ending activity \(activity.id, privacy: .public)")
 
-            // Show the "Night Ended" confirmation for a few seconds
-            // rather than either vanishing instantly or looking stuck.
-            await activity.end(
-                ActivityContent(state: endedState, staleDate: nil),
-                dismissalPolicy: .after(Date().addingTimeInterval(8))
-            )
-            logger.notice("Ended activity \(activity.id, privacy: .public)")
+        // Show the "Night Ended" confirmation for a few seconds rather
+        // than either vanishing instantly or looking stuck.
+        await activity.end(
+            ActivityContent(state: endedState, staleDate: nil),
+            dismissalPolicy: .after(Date().addingTimeInterval(8))
+        )
+        logger.notice("Ended activity \(activity.id, privacy: .public)")
+    }
+
+    private func firstActivity(
+        matching nightId: String, timeout: Duration
+    ) async -> Activity<NightActivityAttributes>? {
+        await withTaskGroup(of: Activity<NightActivityAttributes>?.self) { group in
+            group.addTask {
+                for await activity in Activity<NightActivityAttributes>.activityUpdates
+                where activity.attributes.nightId == nightId {
+                    return activity
+                }
+                return nil
+            }
+            group.addTask {
+                try? await Task.sleep(for: timeout)
+                return nil
+            }
+
+            let result = await group.next() ?? nil
+            group.cancelAll()
+            return result
         }
     }
 }
