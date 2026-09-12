@@ -302,6 +302,44 @@ struct HomeView: View {
         )
     }
 
+    /// Two mugs clinking - the "recap ready" mark for a finished Night.
+    /// No SF Symbol matches "cheers", so this is hand-drawn to match the
+    /// app's own vector marks (see `aftrLogo`).
+    private func cheersIcon(color: Color) -> some View {
+        HStack(spacing: -2) {
+            beerMug(color: color)
+                .rotationEffect(.degrees(-18))
+                .offset(y: 1)
+            beerMug(color: color)
+                .rotationEffect(.degrees(18))
+                .offset(y: 1)
+        }
+        .shadow(color: color.opacity(0.5), radius: 5)
+    }
+
+    private func beerMug(color: Color) -> some View {
+        VStack(spacing: 1) {
+            Capsule()
+                .fill(color)
+                .frame(width: 11, height: 3.5)
+
+            ZStack {
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(color.opacity(0.18))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 2)
+                            .stroke(color, lineWidth: 1.4)
+                    )
+                    .frame(width: 11, height: 13)
+
+                RoundedRectangle(cornerRadius: 2.5)
+                    .stroke(color, lineWidth: 1.4)
+                    .frame(width: 5, height: 7.5)
+                    .offset(x: 7.5)
+            }
+        }
+    }
+
     private var welcomeSection: some View {
         VStack(alignment: .leading, spacing: 7) {
             Text("Ready for tonight?")
@@ -669,17 +707,12 @@ struct HomeView: View {
                     height: 52
                 )
 
-                Image(
-                    systemName:
-                        night.status == "finished"
-                        ? "moon.stars.fill"
-                        : "location.fill"
-                )
-                .foregroundStyle(
-                    night.status == "finished"
-                        ? neonPink
-                        : .green
-                )
+                if night.status == "finished" {
+                    cheersIcon(color: neonPink)
+                } else {
+                    Image(systemName: "location.fill")
+                        .foregroundStyle(.green)
+                }
             }
 
             VStack(
