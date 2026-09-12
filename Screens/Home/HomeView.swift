@@ -12,6 +12,12 @@ struct HomeView: View {
     @State private var joinCode = ""
     @State private var isJoiningNight = false
 
+    private enum Field {
+        case nightTitle
+        case joinCode
+    }
+    @FocusState private var focusedField: Field?
+
     @State private var showWrap = false
     @State private var showSettings = false
     @State private var showActiveNight = false
@@ -51,9 +57,13 @@ struct HomeView: View {
 
                         welcomeSection
 
-                        startNightCard
+                        if session.isActive {
+                            activeNightCard
+                        } else {
+                            startNightCard
 
-                        joinNightCard
+                            joinNightCard
+                        }
 
                         quickOverviewSection
 
@@ -92,11 +102,6 @@ struct HomeView: View {
                 .overlay(alignment: .top) { statusBarScrim }
             }
         }
-        .safeAreaInset(edge: .top) {
-            if session.isActive {
-                activeNightBanner
-            }
-        }
         .task {
             await loadNights()
         }
@@ -111,68 +116,96 @@ struct HomeView: View {
         }
     }
 
-    private var activeNightBanner: some View {
+    /// Sits exactly where `startNightCard` normally does - once a Night
+    /// is active there's no separate top banner to fight with scroll
+    /// overscroll/safe-area edge cases, just this in the same slot.
+    private var activeNightCard: some View {
         Button {
             showActiveNight = true
         } label: {
-            HStack(spacing: 10) {
-                Circle()
-                    .fill(Color.green)
-                    .frame(width: 7, height: 7)
-                    .shadow(color: .green.opacity(0.7), radius: 3)
+            VStack(alignment: .leading, spacing: 18) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 6) {
+                            Circle()
+                                .fill(Color.green)
+                                .frame(width: 7, height: 7)
+                                .shadow(color: .green.opacity(0.7), radius: 3)
 
-                Text("NIGHT ACTIVE")
-                    .font(.caption2)
-                    .fontWeight(.bold)
-                    .tracking(1.2)
-                    .foregroundStyle(neonPink)
+                            Text("NIGHT ACTIVE")
+                                .font(.caption2)
+                                .fontWeight(.bold)
+                                .tracking(1.3)
+                                .foregroundStyle(neonPink)
+                        }
 
-                Text("·")
-                    .foregroundStyle(Color.white.opacity(0.25))
+                        Text(session.nightTitle)
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                    }
 
-                Text(session.nightTitle)
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
+                    Spacer()
 
-                Spacer()
-
-                TimelineView(.periodic(from: .now, by: 1)) { context in
-                    Text(elapsed(session.startedAt, context.date))
-                        .font(.caption.monospacedDigit())
-                        .foregroundStyle(Color.white.opacity(0.5))
+                    Image(systemName: "moon.stars.fill")
+                        .font(.system(size: 25))
+                        .foregroundStyle(neonPink)
+                        .shadow(
+                            color: neonPink.opacity(0.55),
+                            radius: 8
+                        )
                 }
 
-                Image(systemName: "chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(Color.white.opacity(0.3))
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(
-                ZStack {
-                    // Fully opaque base first - the pink/purple tint on
-                    // top can be as translucent as it likes without ever
-                    // letting scrolled-past content show through during
-                    // overscroll (the previous version's background was
-                    // a translucent color with nothing solid behind it).
-                    Color.black
+                HStack(alignment: .center) {
+                    TimelineView(.periodic(from: .now, by: 1)) { context in
+                        Text(elapsed(session.startedAt, context.date))
+                            .font(
+                                .system(
+                                    size: 30,
+                                    weight: .bold,
+                                    design: .rounded
+                                )
+                                .monospacedDigit()
+                            )
+                            .foregroundStyle(.white)
+                    }
 
-                    LinearGradient(
-                        colors: [
-                            neonPink.opacity(0.24),
-                            Color.purple.opacity(0.12)
-                        ],
-                        startPoint: .leading,
-                        endPoint: .trailing
+                    Spacer()
+
+                    HStack(spacing: 8) {
+                        Text("View Night")
+                            .font(.system(size: 15, weight: .semibold))
+                        Image(systemName: "arrow.right")
+                    }
+                    .foregroundStyle(.black)
+                    .padding(.horizontal, 16)
+                    .frame(height: 46)
+                    .background(
+                        LinearGradient(
+                            colors: [.white, softPink],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
                     )
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
                 }
+            }
+            .padding(18)
+            .background(
+                LinearGradient(
+                    colors: [
+                        neonPink.opacity(0.16),
+                        Color.white.opacity(0.06)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
             )
-            .overlay(alignment: .bottom) {
-                Rectangle()
-                    .fill(neonPink.opacity(0.30))
-                    .frame(height: 1)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 22)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 22)
+                    .stroke(neonPink.opacity(0.25), lineWidth: 1)
             }
         }
         .buttonStyle(.plain)
@@ -421,6 +454,7 @@ struct HomeView: View {
             )
             .foregroundStyle(.white)
             .tint(neonPink)
+            .focused($focusedField, equals: .nightTitle)
             .padding(.horizontal, 16)
             .frame(height: 54)
             .background(
@@ -546,6 +580,7 @@ struct HomeView: View {
             .autocorrectionDisabled()
             .foregroundStyle(.white)
             .tint(neonPink)
+            .focused($focusedField, equals: .joinCode)
             .onChange(of: joinCode) { _, newValue in
                 joinCode = String(
                     newValue.uppercased().prefix(6)
@@ -897,6 +932,7 @@ struct HomeView: View {
             return
         }
 
+        focusedField = nil
         isStartingNight = true
         status = ""
 
@@ -938,6 +974,7 @@ struct HomeView: View {
             return
         }
 
+        focusedField = nil
         isJoiningNight = true
         status = ""
 
