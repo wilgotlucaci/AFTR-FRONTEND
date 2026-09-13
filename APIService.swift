@@ -60,6 +60,12 @@ struct NightDetailParticipant: Decodable, Identifiable {
     let name: String
 }
 
+struct MeResponse: Decodable {
+    let id: String
+    let name: String
+    let invite_code: String?
+}
+
 final class APIService {
     private let authService = AuthService()
     private let baseURL = AppConfig.apiBaseURL
@@ -566,6 +572,20 @@ final class APIService {
 
     func getBadges() async throws -> [Badge] {
         try await getJSON("/me/badges")
+    }
+
+    // MARK: - Me / invites
+
+    func getMe() async throws -> MeResponse {
+        try await getJSON("/me")
+    }
+
+    func redeemInvite(code: String) async throws {
+        _ = try await sendRaw(
+            "/invites/redeem",
+            method: "POST",
+            body: ["code": code]
+        )
     }
 
     // MARK: - Small JSON helpers

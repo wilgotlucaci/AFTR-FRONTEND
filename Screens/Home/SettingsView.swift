@@ -13,6 +13,10 @@ struct SettingsView: View {
     @State private var isBusy = false
     @State private var status = ""
 
+    @State private var inviteCode: String?
+    @State private var redeemCode = ""
+    @State private var redeemStatus = ""
+
     private let apiService = APIService()
     private let authService = AuthService()
     private let locator = CurrentLocationOnce()
@@ -93,6 +97,65 @@ struct SettingsView: View {
                         }
                     }
 
+                    section("INVITE FRIENDS") {
+                        if let inviteCode {
+                            Text("Your invite code")
+                                .font(.caption)
+                                .foregroundStyle(Color.white.opacity(0.45))
+
+                            Text(inviteCode)
+                                .font(.system(size: 28, weight: .bold, design: .monospaced))
+                                .foregroundStyle(.white)
+                                .tracking(4)
+
+                            ShareLink(
+                                item: "Come track your nights out with me on AFTR. Use my invite code \(inviteCode) when you sign up."
+                            ) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "square.and.arrow.up")
+                                    Text("Share your code")
+                                }
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(.black)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 12)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 13))
+                            }
+                        }
+
+                        Divider().overlay(Color.white.opacity(0.08))
+
+                        Text("Have a friend's code?")
+                            .font(.caption)
+                            .foregroundStyle(Color.white.opacity(0.45))
+
+                        HStack(spacing: 8) {
+                            TextField(
+                                "",
+                                text: $redeemCode,
+                                prompt: Text("CODE").foregroundStyle(Color.white.opacity(0.3))
+                            )
+                            .textInputAutocapitalization(.characters)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 12)
+                            .frame(height: 42)
+                            .background(Color.black.opacity(0.35))
+                            .clipShape(RoundedRectangle(cornerRadius: 11))
+
+                            Button("Redeem") { redeemInviteCode() }
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(neonPink)
+                                .disabled(redeemCode.isEmpty)
+                        }
+
+                        if !redeemStatus.isEmpty {
+                            Text(redeemStatus)
+                                .font(.caption)
+                                .foregroundStyle(Color.white.opacity(0.5))
+                        }
+                    }
+
                     Button {
                         Task {
                             await authService.signOut()
@@ -118,6 +181,7 @@ struct SettingsView: View {
         }
         .task {
             home = try? await apiService.getHome()
+            inviteCode = try? await apiService.getMe().invite_code
         }
     }
 
@@ -179,6 +243,29 @@ struct SettingsView: View {
             .clipShape(RoundedRectangle(cornerRadius: 13))
         }
         .disabled(isBusy)
+    }
+
+    private func redeemInviteCode() {
+        let code = redeemCode.trimmingCharacters(in: .whitespaces)
+        guard !code.isEmpty else { return }
+
+        redeemStatus = ""
+
+        Task {
+            do {
+                try await apiService.redeemInvite(code: code)
+                await MainActor.run {
+                    redeemStatus = String(localized: "Invite redeemed!")
+                    redeemCode = ""
+                }
+            } catch {
+                await MainActor.run {
+                    redeemStatus = String(
+                        localized: "Couldn't redeem that code - check it and try again."
+                    )
+                }
+            }
+        }
     }
 
     private func setHome() {
