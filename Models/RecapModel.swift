@@ -7,6 +7,7 @@ struct RecapModel: Decodable {
     let started_at: String
     let ended_at: String?
     let status: String
+    let vibe: String?
 
     let participants: [RecapParticipant]
     let events: RecapEvents

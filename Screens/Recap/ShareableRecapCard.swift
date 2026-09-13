@@ -7,8 +7,19 @@ import SwiftUI
 struct ShareableRecapCard: View {
     let recap: RecapModel
 
-    private let neonPink = Color(red: 1.0, green: 0.10, blue: 0.58)
-    private let softPink = Color(red: 1.0, green: 0.32, blue: 0.72)
+    private var isChillVibe: Bool { recap.vibe == "chill" }
+
+    private var neonPink: Color {
+        isChillVibe
+            ? Color(red: 0.35, green: 0.55, blue: 1.0)
+            : Color(red: 1.0, green: 0.10, blue: 0.58)
+    }
+
+    private var softPink: Color {
+        isChillVibe
+            ? Color(red: 0.55, green: 0.70, blue: 1.0)
+            : Color(red: 1.0, green: 0.32, blue: 0.72)
+    }
 
     /// Fixed render size rather than letting the view size itself -
     /// ImageRenderer needs a concrete frame, and this matches Instagram/

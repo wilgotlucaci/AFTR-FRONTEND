@@ -65,7 +65,8 @@ final class APIService {
     private let baseURL = AppConfig.apiBaseURL
 
     func createNight(
-        title: String
+        title: String,
+        vibe: String = "wild"
     ) async throws -> CreateNightResponse {
         let token = try await authService.accessToken()
 
@@ -90,7 +91,8 @@ final class APIService {
 
         request.httpBody = try JSONSerialization.data(
             withJSONObject: [
-                "title": title
+                "title": title,
+                "vibe": vibe
             ]
         )
 

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var nightTitle = ""
+    @State private var selectedVibe = "wild"
     @State private var isStartingNight = false
     @State private var status = ""
 
@@ -514,6 +515,9 @@ struct HomeView: View {
                 )
             }
 
+            vibePicker
+                .padding(.top, 4)
+
             Button {
                 startNight()
             } label: {
@@ -598,6 +602,46 @@ struct HomeView: View {
                 neonPink.opacity(0.12),
                 lineWidth: 1
             )
+        }
+    }
+
+    /// Colors the recap's AI tone and visual theme for this Night -
+    /// "wild" (the existing default personality) or a softer "chill".
+    private var vibePicker: some View {
+        HStack(spacing: 8) {
+            vibeButton(id: "chill", label: "Chill", icon: "moon.zzz.fill")
+            vibeButton(id: "wild", label: "Wild", icon: "flame.fill")
+        }
+    }
+
+    private func vibeButton(
+        id: String, label: String, icon: String
+    ) -> some View {
+        let isSelected = selectedVibe == id
+
+        return Button {
+            selectedVibe = id
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                Text(label)
+            }
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(isSelected ? .black : .white.opacity(0.6))
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 11)
+            .background(
+                isSelected
+                    ? AnyShapeStyle(
+                        LinearGradient(
+                            colors: [.white, softPink],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    : AnyShapeStyle(Color.white.opacity(0.06))
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 13))
         }
     }
 
@@ -975,7 +1019,8 @@ struct HomeView: View {
             do {
                 let night =
                     try await apiService.createNight(
-                        title: nightTitle
+                        title: nightTitle,
+                        vibe: selectedVibe
                     )
 
                 try await apiService.joinNight(

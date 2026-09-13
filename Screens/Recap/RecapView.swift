@@ -22,17 +22,22 @@ struct RecapView: View {
 
     private let apiService = APIService()
 
-    private let neonPink = Color(
-        red: 1.0,
-        green: 0.10,
-        blue: 0.58
-    )
+    /// The recap's whole theme follows the Night's chosen vibe - "wild"
+    /// (the app's existing neon pink personality, also the default for
+    /// recaps saved before this existed) or a cooler "chill" tone.
+    private var isChillVibe: Bool { recap?.vibe == "chill" }
 
-    private let softPink = Color(
-        red: 1.0,
-        green: 0.32,
-        blue: 0.72
-    )
+    private var neonPink: Color {
+        isChillVibe
+            ? Color(red: 0.35, green: 0.55, blue: 1.0)
+            : Color(red: 1.0, green: 0.10, blue: 0.58)
+    }
+
+    private var softPink: Color {
+        isChillVibe
+            ? Color(red: 0.55, green: 0.70, blue: 1.0)
+            : Color(red: 1.0, green: 0.32, blue: 0.72)
+    }
 
     var body: some View {
         ZStack {
