@@ -472,7 +472,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "AFTR uses your location during an active Night, including when the app is in the background.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Privacy - Location When In Use Usage Description";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "AFTR uses your location to track where your Night happens.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -520,7 +520,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "AFTR uses your location during an active Night, including when the app is in the background.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Privacy - Location When In Use Usage Description";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "AFTR uses your location to track where your Night happens.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
