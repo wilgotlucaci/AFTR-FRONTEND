@@ -46,7 +46,8 @@ struct AppleSignInButton: View {
             if (error as? ASAuthorizationError)?.code == .canceled {
                 return
             }
-            errorText = error.localizedDescription
+            print("[AppleSignIn] Authorization failed:", error)
+            errorText = Self.friendlyErrorText
 
         case .success(let authorization):
             guard
@@ -80,13 +81,18 @@ struct AppleSignInButton: View {
                         isLoggedIn = true
                     }
                 } catch {
+                    print("[AppleSignIn] Sign-in failed:", error)
                     await MainActor.run {
                         isWorking = false
-                        errorText = error.localizedDescription
+                        errorText = Self.friendlyErrorText
                     }
                 }
             }
         }
+    }
+
+    private static var friendlyErrorText: String {
+        String(localized: "Couldn't sign in with Apple. Please try again.")
     }
 
     private static func displayName(
