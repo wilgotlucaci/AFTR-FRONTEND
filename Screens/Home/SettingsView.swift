@@ -7,6 +7,7 @@ struct SettingsView: View {
 
     @AppStorage("autoEndAtHome") private var autoEndAtHome = true
     @AppStorage("getHomeSafeEnabled") private var getHomeSafeEnabled = false
+    @AppStorage("fridayNightReminderEnabled") private var fridayNightReminderEnabled = false
 
     @State private var home: HomeLocation?
     @State private var isBusy = false
@@ -74,6 +75,22 @@ struct SettingsView: View {
                             }
                         }
                         .tint(neonPink)
+                    }
+
+                    section("REMINDERS") {
+                        Toggle(isOn: $fridayNightReminderEnabled) {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text("Friday night reminder")
+                                    .foregroundStyle(.white)
+                                Text("A nudge at 6pm on Fridays to start a Night.")
+                                    .font(.caption2)
+                                    .foregroundStyle(Color.white.opacity(0.4))
+                            }
+                        }
+                        .tint(neonPink)
+                        .onChange(of: fridayNightReminderEnabled) { _, enabled in
+                            FridayNightReminder.setEnabled(enabled)
+                        }
                     }
 
                     Button {
