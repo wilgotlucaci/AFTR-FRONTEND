@@ -13,6 +13,8 @@ struct RecapView: View {
     @State private var showAddPhotos = false
     @State private var viewerStart: ViewerStart?
     @State private var selectedPage = 0
+    @State private var shareImage: UIImage?
+    @State private var showShareSheet = false
 
     private struct ViewerStart: Identifiable {
         let id: Int
@@ -71,6 +73,11 @@ struct RecapView: View {
                         .flatMap { $0.coordinates },
                     onDone: { Task { await loadMedia() } }
                 )
+            }
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let shareImage {
+                ActivityView(activityItems: [shareImage])
             }
         }
     }
@@ -266,6 +273,24 @@ struct RecapView: View {
 
                 Spacer()
 
+                Button {
+                    let renderer = ImageRenderer(
+                        content: ShareableRecapCard(recap: recap)
+                    )
+                    renderer.scale = 3
+                    if let uiImage = renderer.uiImage {
+                        shareImage = uiImage
+                        showShareSheet = true
+                    }
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .frame(width: 38, height: 38)
+                        .background(Color.white.opacity(0.08))
+                        .clipShape(Circle())
+                }
+
                 Text("RECAP")
                     .font(.caption2)
                     .fontWeight(.semibold)
@@ -273,6 +298,7 @@ struct RecapView: View {
                     .foregroundStyle(
                         neonPink.opacity(0.9)
                     )
+                    .padding(.leading, 6)
             }
 
             VStack(alignment: .leading, spacing: 7) {
@@ -1136,4 +1162,20 @@ struct RecapView: View {
     RecapView(
         nightId: "test-night-id"
     )
+}
+
+private struct ActivityView: UIViewControllerRepresentable {
+    let activityItems: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(
+            activityItems: activityItems,
+            applicationActivities: nil
+        )
+    }
+
+    func updateUIViewController(
+        _ uiViewController: UIActivityViewController,
+        context: Context
+    ) {}
 }
