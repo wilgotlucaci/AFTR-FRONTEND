@@ -728,13 +728,9 @@ struct HomeView: View {
 
     private var emptyRecentNights: some View {
         VStack(spacing: 10) {
-            Image(
-                systemName: "moon.stars"
-            )
-            .font(.system(size: 26))
-            .foregroundStyle(
-                neonPink.opacity(0.65)
-            )
+            cheersIcon(color: neonPink.opacity(0.65))
+                .scaleEffect(1.3)
+                .padding(.bottom, 4)
 
             Text("No Nights yet")
                 .font(.headline)
