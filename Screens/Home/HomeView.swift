@@ -108,6 +108,20 @@ struct HomeView: View {
                 }
                 .scrollIndicators(.hidden)
                 .overlay(alignment: .top) { statusBarScrim }
+                // Tapping into the title/join-code field by accident with
+                // no way to back out (no Cancel, nothing to submit) left
+                // the keyboard stuck open - dismiss on tapping anywhere
+                // else. `simultaneousGesture` so it never blocks the
+                // buttons/rows underneath from also receiving their tap.
+                .simultaneousGesture(
+                    TapGesture().onEnded { focusedField = nil }
+                )
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Done") { focusedField = nil }
+                    }
+                }
             }
         }
         .task {
