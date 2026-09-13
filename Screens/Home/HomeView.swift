@@ -7,6 +7,7 @@ struct HomeView: View {
     @State private var status = ""
 
     @State private var nights: [NightSummary] = []
+    @State private var badges: [Badge] = []
     @State private var isLoadingNights = false
     @State private var selectedNight: NightSummary?
     @State private var justEndedNightId: String?
@@ -55,7 +56,10 @@ struct HomeView: View {
                         selectedNight = nil
                         justEndedNightId = nil
                         session.lastEndedNightId = nil
-                        Task { await loadNights() }
+                        Task {
+                            await loadNights()
+                            await loadBadges()
+                        }
                     }
                 )
 
@@ -75,6 +79,10 @@ struct HomeView: View {
                         }
 
                         quickOverviewSection
+
+                        if !badges.isEmpty {
+                            badgesSection
+                        }
 
                         Button {
                             showWrap = true
@@ -127,6 +135,7 @@ struct HomeView: View {
         }
         .task {
             await loadNights()
+            await loadBadges()
         }
         // `.task` only fires once, the first time this view appears - it
         // won't notice a Night that got ended out-of-process (the Lock
@@ -738,6 +747,54 @@ struct HomeView: View {
         }
     }
 
+    private var badgesSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            sectionTitle("BADGES")
+
+            ScrollView(.horizontal) {
+                HStack(spacing: 12) {
+                    ForEach(badges) { badge in
+                        badgeTile(badge)
+                    }
+                }
+            }
+            .scrollIndicators(.hidden)
+        }
+    }
+
+    private func badgeTile(_ badge: Badge) -> some View {
+        VStack(spacing: 8) {
+            ZStack {
+                Circle()
+                    .fill(
+                        badge.unlocked
+                            ? neonPink.opacity(0.16)
+                            : Color.white.opacity(0.05)
+                    )
+                    .frame(width: 56, height: 56)
+
+                Image(systemName: badge.icon)
+                    .font(.system(size: 22))
+                    .foregroundStyle(
+                        badge.unlocked ? neonPink : Color.white.opacity(0.25)
+                    )
+            }
+
+            Text(badge.name)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(
+                    badge.unlocked ? .white : Color.white.opacity(0.35)
+                )
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .frame(width: 76)
+
+            Text("\(badge.count)")
+                .font(.caption2)
+                .foregroundStyle(Color.white.opacity(0.3))
+        }
+    }
+
     private var recentNightsSection: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
@@ -1092,6 +1149,10 @@ struct HomeView: View {
     }
 
     @MainActor
+    private func loadBadges() async {
+        badges = (try? await apiService.getBadges()) ?? badges
+    }
+
     private func loadNights() async {
         isLoadingNights = true
 

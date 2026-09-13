@@ -562,6 +562,12 @@ final class APIService {
         )
     }
 
+    // MARK: - Badges
+
+    func getBadges() async throws -> [Badge] {
+        try await getJSON("/me/badges")
+    }
+
     // MARK: - Small JSON helpers
 
     private func authorizedRequest(
